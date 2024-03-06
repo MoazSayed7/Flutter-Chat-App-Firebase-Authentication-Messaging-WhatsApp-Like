@@ -1,0 +1,43 @@
+name: chatapp
+description: "A new Flutter project."
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+
+dependencies:
+  awesome_dialog: ^3.2.0
+  camera: ^0.10.5+9
+  chat_bubbles: ^1.6.0
+  cloud_firestore: ^4.15.7
+  cupertino_icons: ^1.0.6
+  dio: ^5.4.1
+  eva_icons_flutter: ^3.1.0
+  firebase_auth: ^4.17.7
+  firebase_core: ^2.26.0
+  firebase_messaging: ^14.7.18
+  flutter:
+    sdk: flutter
+  flutter_local_notifications: ^16.3.3
+  flutter_offline: ^3.0.1
+  flutter_screenutil: ^5.9.0
+  gap: ^3.0.1
+  google_sign_in: ^6.2.1
+  googleapis_auth: ^1.5.0
+  intl: ^0.19.0
+  local_auth: ^2.2.0
+  logger: ^2.1.0
+  shared_preferences: ^2.2.2
+
+dev_dependencies:
+  flutter_lints: ^3.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
