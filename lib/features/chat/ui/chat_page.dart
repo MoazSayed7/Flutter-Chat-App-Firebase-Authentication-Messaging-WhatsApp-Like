@@ -48,7 +48,7 @@ class _ChatScreenState extends State<ChatScreen> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            widget.receivedUserProfilePic != null
+            (widget.receivedUserProfilePic != null) || (widget.receivedUserProfilePic != '')
                 ? ClipOval(
                     child: FadeInImage.assetNetwork(
                       placeholder: 'assets/images/loading.gif',
