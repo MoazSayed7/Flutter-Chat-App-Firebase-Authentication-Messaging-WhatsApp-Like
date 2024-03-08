@@ -83,8 +83,40 @@ flutter pub get
    - Enable the required Firebase services for your app, including Firestore, Authentication, and Cloud Messaging.
 
 5. Set up Firebase for your project by following the [Using Firebase CLI](https://firebase.google.com/docs/flutter/setup).
-   
-6. Run the app:
+
+6. ### Customized `chat_bubbles` Package
+
+I have made custom modifications to the `chat_bubbles` package to enhance the text alignment feature. Specifically, I have added the ability to dynamically set the text alignment within the chat bubbles.
+
+1. Added a new parameter to the `BubbleSpecialThree` class:
+
+   ```dart
+   final TextAlign textAlign;
+   ```
+
+2. Initialized the `textAlign` parameter in the constructor:
+
+   ```dart
+   this.textAlign = TextAlign.left;
+   ```
+
+3. Applied the dynamic text alignment in the widget tree in line 97 (line 97 before making the above edits) :
+
+   ```dart
+   textAlign: textAlign
+   ```
+
+ #### Implementation Details
+
+The changes are made in the `bubble_special_three.dart` file located in the following path:
+
+```
+%LocalAppData%\Pub\Cache\hosted\pub.dev\chat_bubbles-1.5.0\lib\bubbles\bubble_special_three.dart
+```
+
+Users can find the modified file in this location and review the changes made for better understanding.
+
+7. Run the app:
 
 ```bash
 flutter run
