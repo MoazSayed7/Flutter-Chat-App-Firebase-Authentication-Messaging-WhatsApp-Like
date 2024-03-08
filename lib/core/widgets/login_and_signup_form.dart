@@ -11,7 +11,7 @@ import '../../../helpers/app_regex.dart';
 import '../../../themes/styles.dart';
 import '../../helpers/extensions.dart';
 import '../../router/routes.dart';
-import 'app_text_button.dart';
+import 'app_button.dart';
 import 'app_text_form_field.dart';
 import 'password_validations.dart';
 
@@ -35,36 +35,38 @@ class EmailAndPassword extends StatefulWidget {
 
 class _EmailAndPasswordState extends State<EmailAndPassword> {
   bool isObscureText = true;
+
   bool hasLowercase = false;
   bool hasUppercase = false;
-  late final _auth = FirebaseAuth.instance;
-  late final _fireStore = FirebaseFirestore.instance;
-  late final notificationSettings = FirebaseMessaging.instance;
   bool hasSpecialCharacters = false;
-
   bool hasNumber = false;
   bool hasMinLength = false;
+
+  late final _auth = FirebaseAuth.instance;
+  late final _fireStore = FirebaseFirestore.instance;
+
   late TextEditingController nameController = TextEditingController();
   late TextEditingController emailController = TextEditingController();
   late TextEditingController passwordController = TextEditingController();
   late TextEditingController passwordConfirmationController =
       TextEditingController();
-  final formKey = GlobalKey<FormState>();
-  bool isLookingRight = false;
 
-  bool isLookingLeft = false;
+  final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Form(
       key: formKey,
       child: Column(
         children: [
-          nameField(),
-          emailField(),
+          if (widget.isSignUpPage == true) nameField(),
+          if (widget.isPasswordPage == null) emailField(),
           passwordField(),
           Gap(18.h),
-          passwordConfirmationField(),
-          forgetPasswordTextButton(context),
+          if (widget.isSignUpPage == true || widget.isPasswordPage == true)
+            passwordConfirmationField(),
+          if (widget.isSignUpPage == null && widget.isPasswordPage == null)
+            forgetPasswordTextButton(context),
           Gap(10.h),
           PasswordValidations(
             hasLowerCase: hasLowercase,
@@ -91,45 +93,38 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
     super.dispose();
   }
 
-  Widget emailField() {
-    if (widget.isPasswordPage == null) {
-      return Column(
-        children: [
-          AppTextFormField(
-            hint: 'Email',
-            validator: (value) {
-              if (value == null ||
-                  value.isEmpty ||
-                  !AppRegex.isEmailValid(value)) {
-                return 'Please enter a valid email';
-              }
-            },
-            controller: emailController,
-          ),
-          Gap(18.h),
-        ],
-      );
-    }
-    return const SizedBox.shrink();
+  Column emailField() {
+    return Column(
+      children: [
+        AppTextFormField(
+          hint: 'Email',
+          validator: (value) {
+            if (value == null ||
+                value.isEmpty ||
+                !AppRegex.isEmailValid(value)) {
+              return 'Please enter a valid email';
+            }
+          },
+          controller: emailController,
+        ),
+        Gap(18.h),
+      ],
+    );
   }
 
   Widget forgetPasswordTextButton(BuildContext context) {
-    if (widget.isSignUpPage == null && widget.isPasswordPage == null) {
-      return TextButton(
-        onPressed: () {
-          context.pushNamed(Routes.forgetScreen);
-        },
-        child: Align(
-          alignment: Alignment.centerRight,
-          child: Text(
-            'forget password?',
-            style: TextStyles.font15Green500Weight,
-          ),
+    return TextButton(
+      onPressed: () {
+        context.pushNamed(Routes.forgetScreen);
+      },
+      child: Align(
+        alignment: Alignment.centerRight,
+        child: Text(
+          'forget password?',
+          style: TextStyles.font15Green500Weight,
         ),
-      );
-    } else {
-      return const SizedBox.shrink();
-    }
+      ),
+    );
   }
 
   getToken() async {
@@ -143,8 +138,8 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
     setupPasswordControllerListener();
   }
 
-  AppTextButton loginButton(BuildContext context) {
-    return AppTextButton(
+  AppButton loginButton(BuildContext context) {
+    return AppButton(
       buttonText: 'Login',
       textStyle: TextStyles.font15DarkBlue500Weight,
       onPressed: () async {
@@ -229,28 +224,25 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
     }
   }
 
-  Widget nameField() {
-    if (widget.isSignUpPage == true) {
-      return Column(
-        children: [
-          AppTextFormField(
-            hint: 'Name',
-            validator: (value) {
-              if (value == null || value.isEmpty || value.startsWith(' ')) {
-                return 'Please enter a valid name';
-              }
-            },
-            controller: nameController,
-          ),
-          Gap(18.h),
-        ],
-      );
-    }
-    return const SizedBox.shrink();
+  Column nameField() {
+    return Column(
+      children: [
+        AppTextFormField(
+          hint: 'Name',
+          validator: (value) {
+            if (value == null || value.isEmpty || value.startsWith(' ')) {
+              return 'Please enter a valid name';
+            }
+          },
+          controller: nameController,
+        ),
+        Gap(18.h),
+      ],
+    );
   }
 
-  AppTextButton passwordButton(BuildContext context) {
-    return AppTextButton(
+  AppButton passwordButton(BuildContext context) {
+    return AppButton(
       buttonText: 'Create Password',
       textStyle: TextStyles.font15DarkBlue500Weight,
       onPressed: () async {
@@ -327,35 +319,32 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
   }
 
   Widget passwordConfirmationField() {
-    if (widget.isSignUpPage == true || widget.isPasswordPage == true) {
-      return AppTextFormField(
-        controller: passwordConfirmationController,
-        hint: 'Password Confirmation',
-        isObscureText: isObscureText,
-        suffixIcon: GestureDetector(
-          onTap: () {
-            setState(() {
-              isObscureText = !isObscureText;
-            });
-          },
-          child: Icon(
-            isObscureText ? Icons.visibility_off : Icons.visibility,
-            color: Colors.white,
-          ),
-        ),
-        validator: (value) {
-          if (value != passwordController.text) {
-            return 'Enter a matched passwords';
-          }
-          if (value == null ||
-              value.isEmpty ||
-              !AppRegex.isPasswordValid(value)) {
-            return 'Please enter a valid password';
-          }
+    return AppTextFormField(
+      controller: passwordConfirmationController,
+      hint: 'Password Confirmation',
+      isObscureText: isObscureText,
+      suffixIcon: GestureDetector(
+        onTap: () {
+          setState(() {
+            isObscureText = !isObscureText;
+          });
         },
-      );
-    }
-    return const SizedBox.shrink();
+        child: Icon(
+          isObscureText ? Icons.visibility_off : Icons.visibility,
+          color: Colors.white,
+        ),
+      ),
+      validator: (value) {
+        if (value != passwordController.text) {
+          return 'Enter a matched passwords';
+        }
+        if (value == null ||
+            value.isEmpty ||
+            !AppRegex.isPasswordValid(value)) {
+          return 'Please enter a valid password';
+        }
+      },
+    );
   }
 
   AppTextFormField passwordField() {
@@ -397,8 +386,8 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
     });
   }
 
-  AppTextButton signUpButton(BuildContext context) {
-    return AppTextButton(
+  AppButton signUpButton(BuildContext context) {
+    return AppButton(
       buttonText: "Create Account",
       textStyle: TextStyles.font15DarkBlue500Weight,
       onPressed: () async {
