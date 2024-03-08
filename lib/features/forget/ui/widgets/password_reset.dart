@@ -6,7 +6,7 @@ import 'package:gap/gap.dart';
 
 import '../../../../../helpers/app_regex.dart';
 import '../../../../../themes/styles.dart';
-import '../../../../core/widgets/app_text_button.dart';
+import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_text_form_field.dart';
 
 class PasswordReset extends StatefulWidget {
