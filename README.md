@@ -4,6 +4,123 @@
 
 This Flutter project is a chat application inspired by WhatsApp. The app features a familiar interface with a functional chat page, a Local Auth Screen, and user registration using email/password or Google Account.
 
+## Screenshots
+
+### SignUp using Email & Password Screen
+<HTML>
+    <body>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/1cc7b06d-f7b2-4ea8-8895-faa002588433" alt="drawing" style="width:250px;"/>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/6898582c-fe9f-4168-acd1-55e15219fdfb" alt="drawing" style="width:250px;"/>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/e12a3e09-384f-4ae7-af0d-159c87be9ec9" alt="drawing" style="width:250px;"/>
+      <br/>
+      <br/>
+      <br/>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/9e1f9c54-a438-4e4e-a3a8-c7f84a63466a" alt="drawing" style="width:250px;"/>
+    </body>
+</HTML>
+
+---
+
+### SignUp using the Google Account Screen ( After Select Account )
+
+<HTML>
+    <body>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/c950c7dc-f50c-4c9c-975e-f7e6abd60ba6" alt="drawing" style="width:250px;"/>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/472d4063-88a9-488d-9a77-96bb16e5432d" alt="drawing" style="width:250px;"/>
+    </body>
+</HTML>
+
+---
+
+### Login Screen
+
+<HTML>
+    <body>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/f611aabb-3a7a-40d3-9913-34d82c49ff14" alt="drawing" style="width:250px;"/>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/cad93a1c-538f-4e31-b19b-a6ba890ee6e6" alt="drawing" style="width:250px;"/>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/9bd02d42-86a9-4195-a9b1-7aeaaed92f2e" alt="drawing" style="width:250px;"/>
+    </body>
+</HTML>
+
+---
+
+### Reset Password Screen
+<HTML>
+    <body>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/e112a7fe-be28-40a8-b108-8f7d0def4556" alt="drawing" style="width:250px;"/>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/7d3ff005-98f6-483c-9c5f-b476eda97c18" alt="drawing" style="width:250px;"/>
+    </body>
+</HTML>
+
+---
+
+### Home Screen
+<HTML>
+    <body>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/9de3efd6-2790-41bd-b055-5bfac3b4b4ff" alt="drawing" style="width:250px;"/>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/78bf351e-817f-462e-97a6-ca1f82d5b472" alt="drawing" style="width:250px;"/>
+    </body>
+</HTML>
+
+---
+
+### Settings Screen
+<HTML>
+    <body>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/e56de1c9-dabc-473e-8013-cac03ce3f5ee" alt="drawing" style="width:250px;"/>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/41ef5328-6bf6-444f-914d-beb739091d6d" alt="drawing" style="width:250px;"/>
+    </body>
+</HTML>
+
+---
+
+### Chat Screen
+<HTML>
+    <body>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/59048556-34bc-4f75-bc40-19a588518f33" alt="drawing" style="width:250px;"/>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/d2974f49-2882-444e-ba59-e1aee2a70f73" alt="drawing" style="width:250px;"/>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/652f1f02-e2fa-41c6-bef8-0b3f34d0a505" alt="drawing" style="width:250px;"/>
+    </body>
+</HTML>
+
+---
+
+### Camera Screen
+<HTML>
+    <body>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/eae1a293-cece-4e88-8e59-b27afe9e3c94" alt="drawing" style="width:250px;"/>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/a2fb8799-0ea0-4ea4-8ac0-8447ec6d2553" alt="drawing" style="width:250px;"/>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/dc9194b9-5375-488f-8df4-b2e713c2ff6d" alt="drawing" style="width:250px;"/>
+    </body>
+</HTML>
+
+---
+
+### Local Auth Screen (Fingerprint & FaceID)
+<HTML>
+    <body>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/f3055d26-15c7-4377-87d6-2bd81fa2890a" alt="drawing" style="width:250px;"/>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/4be29a96-0279-4ea1-bebc-9313232abe42" alt="drawing" style="width:250px;"/>
+    </body>
+</HTML>
+
+---
+
+### No Internet Screen
+<HTML>
+    <body>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/6c78984a-d83e-43c4-b1db-bb16e58b12d4" alt="drawing" style="width:250px;"/>
+    </body>
+</HTML>
+
+---
+
+### Coming Soon Screen
+<HTML>
+    <body>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/66d0ff5c-798f-4048-a3b3-0885750c96f0" alt="drawing" style="width:250px;"/>
+    </body>
+</HTML>
 
 ## Features
 
