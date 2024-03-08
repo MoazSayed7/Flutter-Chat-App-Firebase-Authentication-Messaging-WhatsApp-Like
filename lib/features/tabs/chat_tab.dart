@@ -21,7 +21,7 @@ class BuildUsersListView extends StatelessWidget {
           Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
           if (_auth.currentUser!.email != data['email']) {
             return ListTile(
-              leading: data['profilePic'] != null
+              leading: (data['profilePic'] != null) || (data['profilePic'] != '')
                   ? ClipOval(
                       child: FadeInImage.assetNetwork(
                         placeholder: 'assets/images/loading.gif',
