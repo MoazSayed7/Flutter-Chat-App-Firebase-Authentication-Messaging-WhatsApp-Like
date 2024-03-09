@@ -21,7 +21,9 @@ class BuildUsersListView extends StatelessWidget {
           Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
           if (_auth.currentUser!.email != data['email']) {
             return ListTile(
-              leading: (data['profilePic'] != null) || (data['profilePic'] != '')
+              leading: Hero(
+              tag: 'profilePic',
+              child: data['profilePic'] != null && data['profilePic'] != ''
                   ? ClipOval(
                       child: FadeInImage.assetNetwork(
                         placeholder: 'assets/images/loading.gif',
@@ -37,6 +39,7 @@ class BuildUsersListView extends StatelessWidget {
                       width: 50.w,
                       fit: BoxFit.cover,
                     ),
+              ),
               tileColor: const Color(0xff111B21),
               title: Text(
                 data['name'],
