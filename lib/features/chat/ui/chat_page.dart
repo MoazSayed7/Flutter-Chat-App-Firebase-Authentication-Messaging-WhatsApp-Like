@@ -48,24 +48,26 @@ class _ChatScreenState extends State<ChatScreen> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            (widget.receivedUserProfilePic != null) || (widget.receivedUserProfilePic != '')
-                ? ClipOval(
-                    child: FadeInImage.assetNetwork(
-                      placeholder: 'assets/images/loading.gif',
-                      image: widget.receivedUserProfilePic!,
-                      fit: BoxFit.cover,
-                      width: 50.w,
-                      height: 50.h,
-                    ),
-                  )
-                : ClipOval(
-                    child: Image.asset(
+            Hero(
+              tag: 'profilePic',
+              child: widget.receivedUserProfilePic != null &&
+                      widget.receivedUserProfilePic != ''
+                  ? ClipOval(
+                      child: FadeInImage.assetNetwork(
+                        placeholder: 'assets/images/loading.gif',
+                        image: widget.receivedUserProfilePic!,
+                        fit: BoxFit.cover,
+                        width: 50.w,
+                        height: 50.h,
+                      ),
+                    )
+                  : Image.asset(
                       'assets/images/user.png',
                       height: 50.h,
                       width: 50.w,
                       fit: BoxFit.cover,
                     ),
-                  ),
+            ),
             Gap(15.w),
             Text(widget.receivedUserName),
           ],
