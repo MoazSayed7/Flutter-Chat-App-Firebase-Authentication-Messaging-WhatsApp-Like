@@ -89,7 +89,7 @@ class _MyAppState extends State<MyApp> {
           floatingActionButtonTheme: const FloatingActionButtonThemeData(
             backgroundColor: ColorsManager.greenPrimary,
           ),
-                    progressIndicatorTheme: const ProgressIndicatorThemeData(
+          progressIndicatorTheme: const ProgressIndicatorThemeData(
             color: ColorsManager.greenPrimary,
           ),
           scaffoldBackgroundColor: ColorsManager.backgroundDefaultColor,
