@@ -6,7 +6,6 @@ import 'package:logger/logger.dart';
 
 import '../../helpers/extensions.dart';
 import '../../router/routes.dart';
-import '../../themes/colors.dart';
 
 // A widget that displays the picture taken by the user.
 class DisplayPictureScreen extends StatefulWidget {
@@ -87,9 +86,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
             return CameraPreview(_controller);
           } else {
             return const Center(
-              child: CircularProgressIndicator(
-                color: ColorsManager.greenPrimary,
-              ),
+              child: CircularProgressIndicator(),
             );
           }
         },
