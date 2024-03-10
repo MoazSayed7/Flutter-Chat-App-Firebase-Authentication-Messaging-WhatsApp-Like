@@ -9,40 +9,16 @@ import '../../../core/widgets/no_internet.dart';
 import '../../../core/widgets/or_sign_in_with_text.dart';
 import '../../../core/widgets/terms_and_conditions_text.dart';
 import '../../../services/google_sign_in.dart';
-import '../../../themes/colors.dart';
 import '../../../themes/styles.dart';
 import 'widgets/do_not_have_account.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class BuildLoginScreen extends StatelessWidget {
+  const BuildLoginScreen({
+    super.key,
+  });
 
-  @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: OfflineBuilder(
-        connectivityBuilder: (
-          BuildContext context,
-          ConnectivityResult connectivity,
-          Widget child,
-        ) {
-          final bool connected = connectivity != ConnectivityResult.none;
-          return connected ? _loginPage(context) : const BuildNoInternet();
-        },
-        child: const Center(
-          child: CircularProgressIndicator(
-            color: ColorsManager.greenPrimary,
-          ),
-        ),
-      ),
-    );
-  }
-
-  SafeArea _loginPage(BuildContext context) {
     return SafeArea(
       child: Padding(
         padding:
@@ -101,6 +77,34 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: OfflineBuilder(
+        connectivityBuilder: (
+          BuildContext context,
+          ConnectivityResult connectivity,
+          Widget child,
+        ) {
+          final bool connected = connectivity != ConnectivityResult.none;
+          return connected ? const BuildLoginScreen() : const BuildNoInternet();
+        },
+        child: const Center(
+          child: CircularProgressIndicator(),
         ),
       ),
     );
