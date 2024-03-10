@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -15,13 +14,15 @@ class BuildUsersListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: snapshot.data!.docs.map<Widget>(
-        (doc) {
-          Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-          if (_auth.currentUser!.email != data['email']) {
-            return ListTile(
-              leading: Hero(
+    return ListView.builder(
+      itemCount: snapshot.data!.docs.length,
+      itemBuilder: (context, index) {
+        var doc = snapshot.data!.docs[index];
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+
+        if (_auth.currentUser!.email != data['email']) {
+          return ListTile(
+            leading: Hero(
               tag: 'profilePic',
               child: data['profilePic'] != null && data['profilePic'] != ''
                   ? ClipOval(
@@ -39,45 +40,44 @@ class BuildUsersListView extends StatelessWidget {
                       width: 50.w,
                       fit: BoxFit.cover,
                     ),
+            ),
+            tileColor: const Color(0xff111B21),
+            title: Text(
+              data['name'],
+              style: const TextStyle(
+                color: Colors.white,
               ),
-              tileColor: const Color(0xff111B21),
-              title: Text(
-                data['name'],
-                style: const TextStyle(
-                  color: Colors.white,
-                ),
-                overflow: TextOverflow.ellipsis,
+              overflow: TextOverflow.ellipsis,
+            ),
+            subtitle: Text(
+              data['email'],
+              style: const TextStyle(
+                color: Color.fromARGB(255, 179, 178, 178),
               ),
-              subtitle: Text(
-                data['email'],
-                style: const TextStyle(
-                  color: Color.fromARGB(255, 179, 178, 178),
-                ),
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-              ),
-              isThreeLine: true,
-              titleAlignment: ListTileTitleAlignment.center,
-              enableFeedback: true,
-              dense: false,
-              titleTextStyle: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20.sp,
-                height: 1.2.h,
-              ),
-              subtitleTextStyle: TextStyle(
-                height: 2.h,
-              ),
-              horizontalTitleGap: 15.w,
-              onTap: () {
-                context.pushNamed(Routes.chatScreen, arguments: data);
-              },
-            );
-          } else {
-            return const SizedBox.shrink();
-          }
-        },
-      ).toList(),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
+            isThreeLine: true,
+            titleAlignment: ListTileTitleAlignment.center,
+            enableFeedback: true,
+            dense: false,
+            titleTextStyle: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20.sp,
+              height: 1.2.h,
+            ),
+            subtitleTextStyle: TextStyle(
+              height: 2.h,
+            ),
+            horizontalTitleGap: 15.w,
+            onTap: () {
+              context.pushNamed(Routes.chatScreen, arguments: data);
+            },
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
+      },
     );
   }
 }
