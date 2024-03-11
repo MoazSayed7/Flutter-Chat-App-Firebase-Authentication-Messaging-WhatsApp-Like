@@ -48,11 +48,11 @@ class _ChatScreenState extends State<ChatScreen> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Hero(
-              tag: 'profilePic',
-              child: widget.receivedUserProfilePic != null &&
-                      widget.receivedUserProfilePic != ''
-                  ? ClipOval(
+            widget.receivedUserProfilePic != null &&
+                    widget.receivedUserProfilePic != ''
+                ? Hero(
+                    tag: widget.receivedUserProfilePic!,
+                    child: ClipOval(
                       child: FadeInImage.assetNetwork(
                         placeholder: 'assets/images/loading.gif',
                         image: widget.receivedUserProfilePic!,
@@ -60,14 +60,17 @@ class _ChatScreenState extends State<ChatScreen> {
                         width: 50.w,
                         height: 50.h,
                       ),
-                    )
-                  : Image.asset(
+                    ),
+                  )
+                : Hero(
+                    tag: 'user',
+                    child: Image.asset(
                       'assets/images/user.png',
                       height: 50.h,
                       width: 50.w,
                       fit: BoxFit.cover,
                     ),
-            ),
+                  ),
             Gap(15.w),
             Text(widget.receivedUserName),
           ],
@@ -104,7 +107,9 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await Future.delayed(const Duration(milliseconds: 1000));
-      scrollToDown();
+      scrollTo(
+        _scrollController.position.maxScrollExtent,
+      );
       await HelperNotification.initialize(flutterLocalNotificationsPlugin);
     });
     getToken();
@@ -125,9 +130,9 @@ class _ChatScreenState extends State<ChatScreen> {
     return bidi;
   }
 
-  void scrollToDown() {
+  void scrollTo(double offset) {
     _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent,
+      offset,
       duration: const Duration(seconds: 1),
       curve: Curves.fastOutSlowIn,
     );
@@ -142,7 +147,9 @@ class _ChatScreenState extends State<ChatScreen> {
         message,
         widget.receivedUserID,
       );
-      scrollToDown();
+      scrollTo(
+        _scrollController.position.maxScrollExtent + 70.h,
+      );
       await _chatService.sendPushMessage(
         widget.receivedMToken,
         token!,
@@ -155,47 +162,66 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _buildMessageInput() {
-    return Row(
-      children: [
-        Expanded(
-          child: AppTextFormField(
-            hint: 'Message',
-            controller: _messageController,
-            validator: (_) {},
-          ),
-        ),
-        Gap(8.w),
-        Container(
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            color: Color(0xff00A884),
-          ),
-          child: IconButton(
-            onPressed: sendMessage,
-            icon: const Icon(
-              Icons.send,
-              color: Colors.white,
-              size: 25,
+    return SizedBox(
+      height: 70.h,
+      child: Row(
+        children: [
+          Expanded(
+            child: AppTextFormField(
+              hint: 'Message',
+              controller: _messageController,
+              validator: (_) {},
             ),
           ),
-        )
-      ],
+          Gap(8.w),
+          Container(
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Color(0xff00A884),
+            ),
+            child: IconButton(
+              onPressed: sendMessage,
+              icon: const Icon(
+                Icons.send,
+                color: Colors.white,
+                size: 25,
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 
-  Widget _buildMessageItem(DocumentSnapshot snapshot) {
+  Widget _buildMessageItem(DocumentSnapshot snapshot,
+      DocumentSnapshot? previousMessage, DocumentSnapshot? nextMessage) {
     Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
 
-    return BubbleSpecialThree(
-      text: data['message'],
-      color: const Color(0xff273443),
-      tail: true,
-      textAlign: isArabic(data['message']) ? TextAlign.right : TextAlign.left,
-      isSender: data['senderID'] == _auth.currentUser!.uid,
-      textStyle: const TextStyle(
-        color: Colors.white,
-        fontSize: 16,
-      ),
+    // Check if the current message is from a different day than the previous one
+    bool isNewDay = previousMessage == null ||
+        !_isSameDay(
+            data['timestamp'].toDate(), previousMessage['timestamp'].toDate());
+    bool isNewSender =
+        nextMessage == null || data['senderID'] != nextMessage['senderID'];
+    return Column(
+      children: [
+        if (isNewDay)
+          DateChip(
+            date: data['timestamp'].toDate(),
+            color: const Color(0x558AD3D5),
+          ),
+        BubbleSpecialThree(
+          text: data['message'],
+          color: const Color(0xff273443),
+          textAlign:
+              isArabic(data['message']) ? TextAlign.right : TextAlign.left,
+          sendTime: DateFormat("h:mm a").format(
+            data['timestamp'].toDate(),
+          ),
+          tail: isNewSender ? true : false,
+          isSender: data['senderID'] == _auth.currentUser!.uid,
+        ),
+      ],
     );
   }
 
@@ -212,12 +238,29 @@ class _ChatScreenState extends State<ChatScreen> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         }
-        return ListView(
+        List<DocumentSnapshot> messageDocs = snapshot.data!.docs;
+
+        return ListView.builder(
           controller: _scrollController,
-          children:
-              snapshot.data!.docs.map((doc) => _buildMessageItem(doc)).toList(),
+          itemCount: messageDocs.length,
+          itemBuilder: (context, index) {
+            DocumentSnapshot currentMessage = messageDocs[index];
+            DocumentSnapshot? previousMessage =
+                index > 0 ? messageDocs[index - 1] : null;
+            DocumentSnapshot? nextMessage =
+                index < messageDocs.length - 1 ? messageDocs[index + 1] : null;
+
+            return _buildMessageItem(
+                currentMessage, previousMessage, nextMessage);
+          },
         );
       },
     );
+  }
+
+  bool _isSameDay(DateTime timestamp1, DateTime timestamp2) {
+    return timestamp1.year == timestamp2.year &&
+        timestamp1.month == timestamp2.month &&
+        timestamp1.day == timestamp2.day;
   }
 }
