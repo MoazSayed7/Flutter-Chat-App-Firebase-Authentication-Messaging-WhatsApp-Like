@@ -15,27 +15,44 @@ import 'router/routes.dart';
 import 'themes/colors.dart';
 
 Future<void> main() async {
-  final logger = Logger();
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Initialize Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // Initialize App
+  await initApp();
+
+  // Initialize ScreenUtil
+  await ScreenUtil.ensureScreenSize();
+
+  // Run App
+  runApp(
+    MyApp(appRoute: AppRoute()),
+  );
+}
+
+late String? initialRoute;
+
+Future<void> initApp() async {
+  final logger = Logger();
+  final auth = FirebaseAuth.instance;
   final fireStore = FirebaseFirestore.instance;
 
-  //  Check Version
+  // Compare Versions
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
-
   DocumentSnapshot newestVersionDetails =
       await fireStore.collection('version').doc('newest').get();
   Version newestVersion = Version.parse(newestVersionDetails['version']);
   Version currentVersion = Version.parse(packageInfo.version);
+  int compareResult = newestVersion.compareTo(currentVersion);
 
-  int compareVersions = newestVersion.compareTo(currentVersion);
-
-  FirebaseAuth.instance.authStateChanges().listen(
+  // handle initial route
+  auth.authStateChanges().listen(
     (user) async {
-      if (compareVersions == 0) {
+      if (compareResult == 0) {
         if (user == null || !user.emailVerified) {
           initialRoute = Routes.loginScreen;
         } else {
@@ -61,12 +78,11 @@ Future<void> main() async {
   // listen for messages when the app is in the background or terminated
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  await ScreenUtil.ensureScreenSize();
   message.onTokenRefresh.listen(
     (fcmToken) {
       fireStore
           .collection('users')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .doc(auth.currentUser!.uid)
           .update({'mtoken': fcmToken});
     },
   ).onError(
@@ -74,14 +90,7 @@ Future<void> main() async {
       logger.e(err);
     },
   );
-  runApp(
-    MyApp(
-      appRoute: AppRoute(),
-    ),
-  );
 }
-
-late String? initialRoute;
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {}
