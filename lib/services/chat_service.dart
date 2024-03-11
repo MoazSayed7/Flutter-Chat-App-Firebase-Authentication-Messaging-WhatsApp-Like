@@ -1,13 +1,13 @@
 import 'dart:convert';
 
-import '../helpers/access_token.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
-import 'package:dio/dio.dart';
 
 import '../features/chat/data/model/message.dart';
+import '../helpers/access_token.dart';
 
 class ChatService extends ChangeNotifier {
   final _auth = FirebaseAuth.instance;
@@ -93,9 +93,7 @@ class ChatService extends ChangeNotifier {
       data: data,
     );
 
-    if (response.statusCode == 200) {
-      logger.d(json.encode(response.data));
-    } else {
+    if (response.statusCode != 200) {
       logger.e(response.statusMessage);
     }
   }
