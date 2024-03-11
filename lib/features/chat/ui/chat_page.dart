@@ -62,14 +62,11 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                     ),
                   )
-                : Hero(
-                    tag: 'user',
-                    child: Image.asset(
-                      'assets/images/user.png',
-                      height: 50.h,
-                      width: 50.w,
-                      fit: BoxFit.cover,
-                    ),
+                : Image.asset(
+                    'assets/images/user.png',
+                    height: 50.h,
+                    width: 50.w,
+                    fit: BoxFit.cover,
                   ),
             Gap(15.w),
             Text(widget.receivedUserName),
