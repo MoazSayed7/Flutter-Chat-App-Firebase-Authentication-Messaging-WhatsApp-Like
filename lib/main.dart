@@ -5,6 +5,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:logger/logger.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:pub_semver/pub_semver.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'firebase_options.dart';
@@ -19,19 +21,35 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  final fireStore = FirebaseFirestore.instance;
+
+  //  Check Version
+  PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+  DocumentSnapshot newestVersionDetails =
+      await fireStore.collection('version').doc('newest').get();
+  Version newestVersion = Version.parse(newestVersionDetails['version']);
+  Version currentVersion = Version.parse(packageInfo.version);
+
+  int compareVersions = newestVersion.compareTo(currentVersion);
+
   FirebaseAuth.instance.authStateChanges().listen(
     (user) async {
-      if (user == null || !user.emailVerified) {
-        initialRoute = Routes.loginScreen;
+      if (compareVersions == 0) {
+        if (user == null || !user.emailVerified) {
+          initialRoute = Routes.loginScreen;
+        } else {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          bool? localAuth = prefs.getBool('auth_screen_enabled') ?? false;
+          if (localAuth == true) {
+            initialRoute = Routes.authScreen;
+          }
+          if (localAuth == false) {
+            initialRoute = Routes.homeScreen;
+          }
+        }
       } else {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        bool? localAuth = prefs.getBool('auth_screen_enabled') ?? false;
-        if (localAuth == true) {
-          initialRoute = Routes.authScreen;
-        }
-        if (localAuth == false) {
-          initialRoute = Routes.homeScreen;
-        }
+        initialRoute = Routes.updateScreen;
       }
     },
   );
@@ -46,7 +64,7 @@ Future<void> main() async {
   await ScreenUtil.ensureScreenSize();
   message.onTokenRefresh.listen(
     (fcmToken) {
-      FirebaseFirestore.instance
+      fireStore
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .update({'mtoken': fcmToken});
@@ -56,7 +74,11 @@ Future<void> main() async {
       logger.e(err);
     },
   );
-  runApp(MyApp(appRoute: AppRoute()));
+  runApp(
+    MyApp(
+      appRoute: AppRoute(),
+    ),
+  );
 }
 
 late String? initialRoute;
@@ -86,11 +108,11 @@ class _MyAppState extends State<MyApp> {
         title: 'Chat App',
         theme: ThemeData(
           useMaterial3: true,
-          floatingActionButtonTheme: const FloatingActionButtonThemeData(
-            backgroundColor: ColorsManager.greenPrimary,
-          ),
           progressIndicatorTheme: const ProgressIndicatorThemeData(
             color: ColorsManager.greenPrimary,
+          ),
+          floatingActionButtonTheme: const FloatingActionButtonThemeData(
+            backgroundColor: ColorsManager.greenPrimary,
           ),
           scaffoldBackgroundColor: ColorsManager.backgroundDefaultColor,
           appBarTheme: const AppBarTheme(
