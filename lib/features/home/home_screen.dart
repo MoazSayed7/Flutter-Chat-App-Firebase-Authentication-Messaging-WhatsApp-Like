@@ -155,13 +155,18 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         PopupMenuItem(
           onTap: () async {
-            await GoogleSignIn().disconnect();
-            await _auth.signOut();
-            if (!context.mounted) return;
-            context.pushNamedAndRemoveUntil(
-              Routes.loginScreen,
-              predicate: (route) => false,
-            );
+            try {
+              await GoogleSignIn().disconnect();
+            } catch (e) {
+              logger.e(e.toString());
+            } finally {
+              await _auth.signOut();
+              if (!context.mounted) return;
+              context.pushNamedAndRemoveUntil(
+                Routes.loginScreen,
+                predicate: (route) => false,
+              );
+            }
           },
           child: const Text(
             'Signout',
