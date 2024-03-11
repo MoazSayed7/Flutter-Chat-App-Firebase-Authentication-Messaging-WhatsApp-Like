@@ -22,10 +22,10 @@ class BuildUsersListView extends StatelessWidget {
 
         if (_auth.currentUser!.email != data['email']) {
           return ListTile(
-            leading: Hero(
-              tag: 'profilePic',
-              child: data['profilePic'] != null && data['profilePic'] != ''
-                  ? ClipOval(
+            leading: data['profilePic'] != null && data['profilePic'] != ''
+                ? Hero(
+                    tag: data['profilePic'],
+                    child: ClipOval(
                       child: FadeInImage.assetNetwork(
                         placeholder: 'assets/images/loading.gif',
                         image: data['profilePic'],
@@ -33,14 +33,17 @@ class BuildUsersListView extends StatelessWidget {
                         width: 50.w,
                         height: 50.h,
                       ),
-                    )
-                  : Image.asset(
+                    ),
+                  )
+                : Hero(
+                    tag: 'user',
+                    child: Image.asset(
                       'assets/images/user.png',
                       height: 50.h,
                       width: 50.w,
                       fit: BoxFit.cover,
                     ),
-            ),
+                  ),
             tileColor: const Color(0xff111B21),
             title: Text(
               data['name'],
