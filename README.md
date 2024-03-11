@@ -6,6 +6,16 @@ This Flutter project is a chat application inspired by WhatsApp. The app feature
 
 ## Screenshots
 
+### Update Available Screen
+<HTML>
+    <body>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/7c602d05-8f31-4d3c-8d68-c565cedbb167" alt="drawing" style="width:250px;"/>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/05f671fa-1307-4998-ab9a-0f4c073aae74" alt="drawing" style="width:250px;"/>
+      </body>
+</HTML>
+
+---
+
 ### SignUp using Email & Password Screen
 <HTML>
     <body>
@@ -78,8 +88,8 @@ This Flutter project is a chat application inspired by WhatsApp. The app feature
 <HTML>
     <body>
         <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/59048556-34bc-4f75-bc40-19a588518f33" alt="drawing" style="width:250px;"/>
-        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/d2974f49-2882-444e-ba59-e1aee2a70f73" alt="drawing" style="width:250px;"/>
-        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/652f1f02-e2fa-41c6-bef8-0b3f34d0a505" alt="drawing" style="width:250px;"/>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/631b39e8-a739-45c6-81ba-2f50b902b69f" alt="drawing" style="width:250px;"/>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/629b9897-f87b-4bfd-b3fd-1b36637d81ab" alt="drawing" style="width:250px;"/>
     </body>
 </HTML>
 
@@ -99,8 +109,8 @@ This Flutter project is a chat application inspired by WhatsApp. The app feature
 ### Local Auth Screen (Fingerprint & FaceID)
 <HTML>
     <body>
-        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/f3055d26-15c7-4377-87d6-2bd81fa2890a" alt="drawing" style="width:250px;"/>
-        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/4be29a96-0279-4ea1-bebc-9313232abe42" alt="drawing" style="width:250px;"/>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/6616b902-7ac5-4249-83dc-cb54c314d153" alt="drawing" style="width:250px;"/>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/b5d6f62c-12c9-44bf-ab6d-d95a52f340df" alt="drawing" style="width:250px;"/>
     </body>
 </HTML>
 
@@ -118,7 +128,7 @@ This Flutter project is a chat application inspired by WhatsApp. The app feature
 ### Coming Soon Screen
 <HTML>
     <body>
-        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/66d0ff5c-798f-4048-a3b3-0885750c96f0" alt="drawing" style="width:250px;"/>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/5089d0cd-27b4-4fce-9bfd-d4390d85a69a" alt="drawing" style="width:250px;"/>
     </body>
 </HTML>
 
@@ -159,7 +169,6 @@ This Flutter project is a chat application inspired by WhatsApp. The app feature
 - `camera`: Enables camera interaction and image capture.
 - `chat_bubbles`: Simplifies chat message UI creation.
 - `cloud_firestore`: Integrates with Firebase Firestore for data storage and retrieval.
-- `cupertino_icons`: Offers iOS-style icons for a consistent UI.
 - `dio`: HTTP client for making API requests.
 - `eva_icons_flutter`: Provides additional icons beyond the core Flutter icons.
 - `firebase_auth`: Manages user authentication with Firebase.
@@ -175,6 +184,10 @@ This Flutter project is a chat application inspired by WhatsApp. The app feature
 - `local_auth`: Enables fingerprint and Face ID authentication.
 - `logger`: Assists with logging messages for debugging.
 - `shared_preferences`: Stores simple data locally on the device.
+- `lottie`: Render After Effects animations natively on Flutter.
+- `package_info_plus`: Querying information about the application package.
+- `pub_semver`: in this App to compare versions.
+- `url_launcher`: Plugin for launching a URL.
 
 ## Installation
 
@@ -203,35 +216,28 @@ flutter pub get
 
 6. ### Customized `chat_bubbles` Package
 
-I have made custom modifications to the `chat_bubbles` package to enhance the text alignment feature. Specifically, I have added the ability to dynamically set the text alignment within the chat bubbles.
+I have made custom modifications to the `chat_bubbles` package 
 
-1. Added a new parameter to the `BubbleSpecialThree` class:
+#### Implementation Details
 
-   ```dart
-   final TextAlign textAlign;
-   ```
-
-2. Initialized the `textAlign` parameter in the constructor:
-
-   ```dart
-   this.textAlign = TextAlign.left;
-   ```
-
-3. Applied the dynamic text alignment in the widget tree in line 97 (line 97 before making the above edits) :
-
-   ```dart
-   textAlign: textAlign
-   ```
-
- #### Implementation Details
-
-The changes are made in the `bubble_special_three.dart` file located in the following path:
+I have already uploaded the edited `bubble_special_three.dart` file to my project. You can find it in the following path:
 
 ```
-%LocalAppData%\Pub\Cache\hosted\pub.dev\chat_bubbles-1.5.0\lib\bubbles\bubble_special_three.dart
+removeable/bubble_special_three.dart
 ```
 
-Users can find the modified file in this location and review the changes made for better understanding.
+#### How to Apply Changes
+
+1. Download the edited `bubble_special_three.dart` file.
+
+2. Replace the existing `bubble_special_three.dart` file in your Flutter project with the downloaded file.
+
+   - navigate to:
+     ```
+     %LocalAppData%\Pub\Cache\hosted\pub.dev\chat_bubbles-1.6.0\lib\bubbles\bubble_special_three.dart
+     ```
+   - Delete the existing `bubble_special_three.dart` file and replace it with the downloaded file from my repository.
+
 
 7. Run the app:
 
