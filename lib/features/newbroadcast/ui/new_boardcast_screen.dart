@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 class NewBroadCastScreen extends StatelessWidget {
   const NewBroadCastScreen({super.key});
@@ -10,7 +11,7 @@ class NewBroadCastScreen extends StatelessWidget {
         title: const Text('New broadcast'),
       ),
       body: Center(
-        child: Image.asset('assets/images/soon.gif'),
+        child: Lottie.asset('assets/lottie/soon.json'),
       ),
     );
   }
