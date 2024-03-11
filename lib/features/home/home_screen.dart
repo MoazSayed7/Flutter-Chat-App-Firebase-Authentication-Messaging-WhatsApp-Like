@@ -94,10 +94,10 @@ class _HomeScreenState extends State<HomeScreen> {
         await FirebaseMessaging.instance.getInitialMessage();
 
     if (initialMessage != null) {
-      _handleMessage(initialMessage);
+      _goToNotificationChatPage(initialMessage);
     }
 
-    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
+    FirebaseMessaging.onMessageOpenedApp.listen(_goToNotificationChatPage);
   }
 
   PopupMenuButton _buildPopMenu() {
@@ -172,7 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _handleMessage(RemoteMessage message) {
+  void _goToNotificationChatPage(RemoteMessage message) {
     context.pushNamed(Routes.chatScreen, arguments: message.data);
   }
 }
