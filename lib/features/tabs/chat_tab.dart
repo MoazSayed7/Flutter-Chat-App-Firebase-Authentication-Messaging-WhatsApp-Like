@@ -35,14 +35,11 @@ class BuildUsersListView extends StatelessWidget {
                       ),
                     ),
                   )
-                : Hero(
-                    tag: 'user',
-                    child: Image.asset(
-                      'assets/images/user.png',
-                      height: 50.h,
-                      width: 50.w,
-                      fit: BoxFit.cover,
-                    ),
+                : Image.asset(
+                    'assets/images/user.png',
+                    height: 50.h,
+                    width: 50.w,
+                    fit: BoxFit.cover,
                   ),
             tileColor: const Color(0xff111B21),
             title: Text(
