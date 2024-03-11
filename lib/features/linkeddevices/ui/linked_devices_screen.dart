@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 class LinkedDevicesScreen extends StatelessWidget {
   const LinkedDevicesScreen({super.key});
@@ -10,7 +11,7 @@ class LinkedDevicesScreen extends StatelessWidget {
         title: const Text('Linked devices'),
       ),
       body: Center(
-        child: Image.asset('assets/images/soon.gif'),
+        child: Lottie.asset('assets/lottie/soon.json'),
       ),
     );
   }
