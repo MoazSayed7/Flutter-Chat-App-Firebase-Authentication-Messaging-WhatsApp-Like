@@ -13,4 +13,5 @@ class Routes {
   static const chatScreen = '/chatScreen';
   static const starredMessagesScreen = '/starredMessagesScreen';
   static const displayPictureScreen = '/displayPictureScreen';
+  static const updateScreen = '/updateScreen';
 }
