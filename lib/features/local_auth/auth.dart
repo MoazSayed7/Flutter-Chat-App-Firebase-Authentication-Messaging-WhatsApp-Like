@@ -4,9 +4,9 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:logger/logger.dart';
 import 'package:gap/gap.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:logger/logger.dart';
 
 import '../../helpers/extensions.dart';
 import '../../router/routes.dart';
@@ -32,8 +32,7 @@ class _AuthState extends State<Auth> {
   Color fingColor = Colors.grey;
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
+    return Scaffold(
         body: Container(
           color: const Color(0xff111B21),
           child: ListView(
@@ -81,7 +80,7 @@ class _AuthState extends State<Auth> {
             ],
           ),
         ),
-      ),
+     
     );
   }
 
