@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 class StarredMessagesScreen extends StatelessWidget {
   const StarredMessagesScreen({super.key});
@@ -10,7 +11,7 @@ class StarredMessagesScreen extends StatelessWidget {
         title: const Text('Starred messages'),
       ),
       body: Center(
-        child: Image.asset('assets/images/soon.gif'),
+        child: Lottie.asset('assets/lottie/soon.json'),
       ),
     );
   }
