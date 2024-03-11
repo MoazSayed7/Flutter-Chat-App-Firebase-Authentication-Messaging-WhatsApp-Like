@@ -14,6 +14,7 @@ import '../features/newgroup/ui/new_group_screen.dart';
 import '../features/settings/settings_screen.dart';
 import '../features/signup/ui/sign_up_sceen.dart';
 import '../features/starredMessages/starred_messages.dart';
+import '../features/update/ui/update.dart';
 import 'routes.dart';
 
 class AppRoute {
@@ -22,6 +23,11 @@ class AppRoute {
       case Routes.authScreen:
         return MaterialPageRoute(
           builder: (context) => const Auth(),
+        );
+
+      case Routes.updateScreen:
+        return MaterialPageRoute(
+          builder: (context) => const UpdateScreen(),
         );
 
       case Routes.chatScreen:
