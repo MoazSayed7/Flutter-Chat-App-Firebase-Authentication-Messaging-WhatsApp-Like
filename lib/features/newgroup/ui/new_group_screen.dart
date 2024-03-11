@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:lottie/lottie.dart';
 
 class NewGroupScreen extends StatelessWidget {
   const NewGroupScreen({super.key});
@@ -11,7 +11,7 @@ class NewGroupScreen extends StatelessWidget {
         title: const Text('New group'),
       ),
       body: Center(
-        child: Image.asset('assets/images/soon.gif'),
+        child: Lottie.asset('assets/lottie/soon.json'),
       ),
     );
   }
