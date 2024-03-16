@@ -38,6 +38,7 @@ class AppRoute {
               receivedUserName: arguments['name'],
               receivedUserID: arguments['uid'],
               receivedMToken: arguments['mtoken'],
+              active: arguments['isOnline'],
               receivedUserProfilePic: arguments['profilePic'],
             ),
           );
