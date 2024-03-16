@@ -50,7 +50,7 @@ class BuildUsersListView extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
             subtitle: Text(
-              data['email'],
+              data['isOnline'] ? 'Online' : 'Offline',
               style: const TextStyle(
                 color: Color.fromARGB(255, 179, 178, 178),
               ),
