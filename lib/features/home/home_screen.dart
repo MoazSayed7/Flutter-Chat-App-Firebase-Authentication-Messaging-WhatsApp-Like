@@ -1,4 +1,5 @@
 import 'package:camera/camera.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -19,8 +20,9 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   final _auth = FirebaseAuth.instance;
+  final _firestore = FirebaseFirestore.instance;
   var logger = Logger();
 
   @override
@@ -86,7 +88,53 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    setupInteractedMessage();
+    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) async {
+        await _firestore.collection('users').doc(_auth.currentUser!.uid).update(
+          {
+            'isOnline': true,
+          },
+        );
+        await setupInteractedMessage();
+      },
+    );
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        await _firestore.collection('users').doc(_auth.currentUser!.uid).update(
+          {
+            'isOnline': true,
+          },
+        );
+        break;
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.detached:
+      case AppLifecycleState.hidden:
+      case AppLifecycleState.paused:
+        await _firestore.collection('users').doc(_auth.currentUser!.uid).update(
+          {
+            'isOnline': false,
+          },
+        );
+        break;
+      default:
+        await _firestore.collection('users').doc(_auth.currentUser!.uid).update(
+          {
+            'isOnline': false,
+          },
+        );
+        break;
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
   }
 
   Future<void> setupInteractedMessage() async {
