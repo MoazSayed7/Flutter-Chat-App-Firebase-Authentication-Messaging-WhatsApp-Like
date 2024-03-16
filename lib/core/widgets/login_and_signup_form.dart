@@ -160,6 +160,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
                   'profilePic': _auth.currentUser!.photoURL,
                   'uid': _auth.currentUser!.uid,
                   'mtoken': await getToken(),
+                  'isOnline': true,
                 },
                 SetOptions(merge: true),
               );
@@ -268,6 +269,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
                 'email': widget.googleUser!.email,
                 'uid': _auth.currentUser!.uid,
                 'mtoken': await getToken(),
+                'isOnline': true,
               },
             );
             if (!context.mounted) return;
@@ -409,6 +411,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
                 'profilePic': '',
                 'uid': _auth.currentUser!.uid,
                 'mtoken': await getToken(),
+                'isOnline': false,
               },
             );
             await _auth.signOut();
