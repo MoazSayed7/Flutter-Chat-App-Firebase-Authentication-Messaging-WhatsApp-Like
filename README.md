@@ -213,6 +213,7 @@ flutter pub get
    - Enable the required Firebase services for your app, including Firestore, Authentication, and Cloud Messaging.
 
 5. Set up Firebase for your project by following the [Using Firebase CLI](https://firebase.google.com/docs/flutter/setup).
+---
 
 6. ### Customized `chat_bubbles` Package
 
@@ -238,8 +239,13 @@ removeable/bubble_special_three.dart
      ```
    - Delete the existing `bubble_special_three.dart` file and replace it with the downloaded file from my repository.
 
+---
 
-7. Run the app:
+7. Update app's launcher icon:
+```bash
+dart run flutter_launcher_icons
+```
+8. Run the app:
 
 ```bash
 flutter run
