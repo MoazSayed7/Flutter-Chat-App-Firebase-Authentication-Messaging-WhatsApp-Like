@@ -2,7 +2,7 @@ name: chatapp
 description: "A new Flutter project."
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
-version: 1.5.0
+version: 1.5.1
 
 environment:
   sdk: ">=3.3.0 <4.0.0"
@@ -11,14 +11,16 @@ dependencies:
   awesome_dialog: ^3.2.0
   camera: ^0.10.5+9
   chat_bubbles: ^1.6.0
-  cloud_firestore: ^4.15.8
+  cloud_firestore: ^4.15.9
+  cupertino_icons: ^1.0.6
   dio: ^5.4.1
   eva_icons_flutter: ^3.1.0
-  firebase_auth: ^4.17.8
+  firebase_auth: ^4.17.9
   firebase_core: ^2.27.0
-  firebase_messaging: ^14.7.19
+  firebase_messaging: ^14.7.20
   flutter:
     sdk: flutter
+  flutter_launcher_icons: ^0.13.1
   flutter_local_notifications: ^17.0.0
   flutter_offline: ^3.0.1
   flutter_screenutil: ^5.9.0
@@ -29,7 +31,7 @@ dependencies:
   local_auth: ^2.2.0
   logger: ^2.1.0
   lottie: ^3.1.0
-  package_info_plus: ^5.0.1
+  package_info_plus: ^4.2.0
   pub_semver: ^2.1.4
   shared_preferences: ^2.2.2
   url_launcher: ^6.2.5
