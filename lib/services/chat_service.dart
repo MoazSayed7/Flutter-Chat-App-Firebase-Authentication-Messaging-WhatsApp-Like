@@ -79,7 +79,8 @@ class ChatService extends ChangeNotifier {
           'name': senderName,
           'uid': senderID,
           'mtoken': senderMToken,
-          'profilePic': senderUserProfilePic
+          'profilePic': senderUserProfilePic,
+'isOnline': true
         }
       }
     });
