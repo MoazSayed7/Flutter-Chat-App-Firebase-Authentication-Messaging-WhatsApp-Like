@@ -16,12 +16,14 @@ class ChatScreen extends StatefulWidget {
   final String receivedUserName;
   final String receivedUserID;
   final String receivedMToken;
+  final bool active;
   final String? receivedUserProfilePic;
   const ChatScreen({
     super.key,
     required this.receivedUserName,
     required this.receivedUserID,
     required this.receivedMToken,
+    required this.active,
     required this.receivedUserProfilePic,
   });
 
@@ -43,33 +45,49 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leadingWidth: 50.w,
-        toolbarHeight: 70.h,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            widget.receivedUserProfilePic != null &&
-                    widget.receivedUserProfilePic != ''
-                ? Hero(
-                    tag: widget.receivedUserProfilePic!,
-                    child: ClipOval(
-                      child: FadeInImage.assetNetwork(
-                        placeholder: 'assets/images/loading.gif',
-                        image: widget.receivedUserProfilePic!,
-                        fit: BoxFit.cover,
-                        width: 50.w,
-                        height: 50.h,
+        leadingWidth: 85.w,
+        leading: InkWell(
+          borderRadius: BorderRadius.circular(50),
+          onTap: () => Navigator.pop(context),
+          child: Row(
+            children: [
+              Gap(10.w),
+              Icon(Icons.arrow_back_ios, size: 25.sp),
+              widget.receivedUserProfilePic != null &&
+                      widget.receivedUserProfilePic != ''
+                  ? Hero(
+                      tag: widget.receivedUserProfilePic!,
+                      child: ClipOval(
+                        child: FadeInImage.assetNetwork(
+                          placeholder: 'assets/images/loading.gif',
+                          image: widget.receivedUserProfilePic!,
+                          fit: BoxFit.cover,
+                          width: 50.w,
+                          height: 50.h,
+                        ),
                       ),
+                    )
+                  : Image.asset(
+                      'assets/images/user.png',
+                      height: 50.h,
+                      width: 50.w,
+                      fit: BoxFit.cover,
                     ),
-                  )
-                : Image.asset(
-                    'assets/images/user.png',
-                    height: 50.h,
-                    width: 50.w,
-                    fit: BoxFit.cover,
-                  ),
-            Gap(15.w),
+            ],
+          ),
+        ),
+        toolbarHeight: 70.h,
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
             Text(widget.receivedUserName),
+            Text(
+              widget.active ? 'Online' : 'Offline',
+              style: TextStyle(
+                fontSize: 13.sp,
+                color: const Color.fromARGB(255, 179, 178, 178),
+              ),
+            ),
           ],
         ),
       ),
