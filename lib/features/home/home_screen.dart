@@ -93,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       (_) async {
         await _firestore.collection('users').doc(_auth.currentUser!.uid).update(
           {
-            'isOnline': true,
+            'isOnline': 'true',
           },
         );
         await setupInteractedMessage();
@@ -107,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       case AppLifecycleState.resumed:
         await _firestore.collection('users').doc(_auth.currentUser!.uid).update(
           {
-            'isOnline': true,
+            'isOnline': 'true',
           },
         );
         break;
@@ -117,14 +117,14 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       case AppLifecycleState.paused:
         await _firestore.collection('users').doc(_auth.currentUser!.uid).update(
           {
-            'isOnline': false,
+            'isOnline': 'false',
           },
         );
         break;
       default:
         await _firestore.collection('users').doc(_auth.currentUser!.uid).update(
           {
-            'isOnline': false,
+            'isOnline': 'false',
           },
         );
         break;
@@ -209,6 +209,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               logger.e(e.toString());
             } finally {
               await _auth.signOut();
+              // ignore: control_flow_in_finally
               if (!context.mounted) return;
               context.pushNamedAndRemoveUntil(
                 Routes.loginScreen,
@@ -226,6 +227,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }
 
   void _goToNotificationChatPage(RemoteMessage message) {
-    context.pushNamed(Routes.chatScreen, arguments: message.data);
+    if (message.data['type'] == 'chat') {
+      context.pushNamed(Routes.chatScreen, arguments: message.data);
+    } else if (message.data['type'] == 'update') {
+      context.pushReplacementNamed(Routes.updateScreen);
+    } else {
+      context.pushReplacementNamed(Routes.homeScreen);
+    }
   }
 }
