@@ -54,7 +54,7 @@ class GoogleSignin {
             'profilePic': _auth.currentUser!.photoURL,
             'uid': _auth.currentUser!.uid,
             'mtoken': await getToken(),
-            'isOnline': true,
+            'isOnline': 'true',
           },
           SetOptions(merge: true),
         );
