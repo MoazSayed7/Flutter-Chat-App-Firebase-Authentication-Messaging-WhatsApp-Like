@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 
+import '../core/networking/dio_factory.dart';
 import '../features/chat/data/model/message.dart';
 import '../helpers/access_token.dart';
 
@@ -77,14 +78,16 @@ class ChatService extends ChangeNotifier {
         "notification": {"body": message, "title": senderName},
         'data': {
           'name': senderName,
+          'type': 'chat',
           'uid': senderID,
           'mtoken': senderMToken,
-          'profilePic': senderUserProfilePic,
-'isOnline': true
+          'isOnline': 'true',
+          'profilePic': senderUserProfilePic
         }
       }
     });
-    var dio = Dio();
+
+    Dio dio = DioFactory.getDio();
     var response = await dio.request(
       'https://fcm.googleapis.com/v1/projects/chatappmoaz/messages:send',
       options: Options(
