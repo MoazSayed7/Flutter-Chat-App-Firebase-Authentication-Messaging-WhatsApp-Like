@@ -16,7 +16,7 @@ class ChatScreen extends StatefulWidget {
   final String receivedUserName;
   final String receivedUserID;
   final String receivedMToken;
-  final bool active;
+  final String active;
   final String? receivedUserProfilePic;
   const ChatScreen({
     super.key,
@@ -82,7 +82,7 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             Text(widget.receivedUserName),
             Text(
-              widget.active ? 'Online' : 'Offline',
+              widget.active == 'true' ? 'Online' : 'Offline',
               style: TextStyle(
                 fontSize: 13.sp,
                 color: const Color.fromARGB(255, 179, 178, 178),
