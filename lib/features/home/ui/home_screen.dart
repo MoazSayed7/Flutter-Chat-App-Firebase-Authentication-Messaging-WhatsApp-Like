@@ -1,4 +1,5 @@
 import 'package:camera/camera.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../services/database.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -168,7 +169,16 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             } catch (e) {
               logger.e(e.toString());
             } finally {
+              await DatabaseMethods.updateUserDetails({'isOnline': 'false'});
+
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+
+              if (prefs.getBool('auth_screen_enabled') != null) {
+                await prefs.remove('auth_screen_enabled');
+              }
+
               await _auth.signOut();
+
               // ignore: control_flow_in_finally
               if (!context.mounted) return;
               context.pushNamedAndRemoveUntil(
