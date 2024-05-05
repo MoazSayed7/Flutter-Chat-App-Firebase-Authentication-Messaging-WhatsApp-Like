@@ -1,6 +1,6 @@
 {
-    "name": "chatapp",
-    "short_name": "chatapp",
+    "name": "chatchat",
+    "short_name": "chatchat",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
