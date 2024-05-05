@@ -1,5 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +12,6 @@ import '../router/routes.dart';
 
 class GoogleSignin {
   static final _auth = FirebaseAuth.instance;
-  static final _fireStore = FirebaseFirestore.instance;
   late final notificationSettings = FirebaseMessaging.instance;
   static Future<String> getToken() async {
     final fcmToken = await FirebaseMessaging.instance.getToken();
@@ -47,7 +48,7 @@ class GoogleSignin {
           arguments: [googleUser, credential],
         );
       } else {
-        await _fireStore.collection('users').doc(_auth.currentUser!.uid).set(
+        await DatabaseMethods.addUserDetails(
           {
             'name': _auth.currentUser!.displayName,
             'email': _auth.currentUser!.email,
@@ -58,6 +59,7 @@ class GoogleSignin {
           },
           SetOptions(merge: true),
         );
+
         if (!context.mounted) return;
         context.pushNamedAndRemoveUntil(
           Routes.homeScreen,
@@ -69,7 +71,7 @@ class GoogleSignin {
         context: context,
         dialogType: DialogType.info,
         animType: AnimType.rightSlide,
-        title: 'Sign in error',
+        title: context.tr('somethingWentWrong'),
         desc: e.toString(),
       ).show();
     }

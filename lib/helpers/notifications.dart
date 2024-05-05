@@ -26,8 +26,8 @@ class HelperNotification {
       FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) async {
     const AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
-      'chatappid',
-      'chatappname',
+      'chatchatappid',
+      'chatchatappname',
       importance: Importance.max,
       priority: Priority.high,
     );

@@ -1,61 +1,11 @@
-import 'dart:io';
-
 import 'package:camera/camera.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 
-import '../../helpers/extensions.dart';
-import '../../router/routes.dart';
+import '../../../helpers/extensions.dart';
+import '../../../router/routes.dart';
 
-// A widget that displays the picture taken by the user.
-class DisplayPictureScreen extends StatefulWidget {
-  final XFile image;
-  const DisplayPictureScreen({super.key, required this.image});
-
-  @override
-  State<DisplayPictureScreen> createState() => _DisplayPictureScreenState();
-}
-
-class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
-  final logger = Logger();
-
-  late IconData icon = Icons.save_alt_rounded;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Display the Picture'),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          // To save the image
-          final String filename = widget.image.name;
-          await widget.image
-              .saveTo('/storage/emulated/0/DCIM/Camera/$filename');
-          icon = Icons.check_rounded;
-          setState(() {});
-        },
-        child: Icon(
-          icon,
-          color: Colors.black,
-        ),
-      ),
-      // The image is stored as a file on the device. Use the `Image.file`
-      // constructor with the given path to display the image.
-      body: SizedBox(
-        height: double.infinity,
-        child: Image.file(
-          File(widget.image.path),
-          filterQuality: FilterQuality.high,
-          fit: BoxFit.cover,
-        ),
-      ),
-    );
-  }
-}
-
-// A screen that allows users to take a picture using a given camera.
 class TakePictureScreen extends StatefulWidget {
   final CameraDescription firstCamera;
   const TakePictureScreen({
@@ -75,8 +25,8 @@ class TakePictureScreenState extends State<TakePictureScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Take a picture',
+        title: Text(
+          context.tr('takePicture'),
         ),
       ),
       body: FutureBuilder<void>(
@@ -101,14 +51,13 @@ class TakePictureScreenState extends State<TakePictureScreen> {
             await _initializeControllerFuture;
 
             // Attempt to take a picture and get the file `image`
-            // where it was saved.
             final image = await _controller.takePicture();
+
             if (!context.mounted) return;
 
-            await context.pushNamed(Routes.displayPictureScreen,
-                arguments: image);
+            context.pushNamed(Routes.displayPictureScreen,
+                arguments: [image, '', '', '']);
           } catch (e) {
-            // If an error occurs, log the error to the console.
             logger.e(e);
           }
         },

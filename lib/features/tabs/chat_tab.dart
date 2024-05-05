@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../helpers/extensions.dart';
 import '../../router/routes.dart';
@@ -26,12 +28,15 @@ class BuildUsersListView extends StatelessWidget {
                 ? Hero(
                     tag: data['profilePic'],
                     child: ClipOval(
-                      child: FadeInImage.assetNetwork(
-                        placeholder: 'assets/images/loading.gif',
-                        image: data['profilePic'],
-                        fit: BoxFit.cover,
+                      child: CachedNetworkImage(
+                        imageUrl: data['profilePic'],
+                        placeholder: (context, url) =>
+                            Image.asset('assets/images/loading.gif'),
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error_outline_rounded),
                         width: 50.w,
                         height: 50.h,
+                        fit: BoxFit.cover,
                       ),
                     ),
                   )
@@ -50,7 +55,9 @@ class BuildUsersListView extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
             subtitle: Text(
-              data['isOnline'] == 'true' ? 'Online' : 'Offline',
+              data['isOnline'] == 'true'
+                  ? context.tr('online')
+                  : context.tr('offline'),
               style: const TextStyle(
                 color: Color.fromARGB(255, 179, 178, 178),
               ),
@@ -91,7 +98,7 @@ class ChatsTab extends StatelessWidget {
       stream: FirebaseFirestore.instance.collection('users').snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return const Text('Something went wrong');
+          return Text(context.tr('somethingWentWrong'));
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());

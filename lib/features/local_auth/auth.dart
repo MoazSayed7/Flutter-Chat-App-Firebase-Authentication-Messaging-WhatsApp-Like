@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -23,8 +24,7 @@ class _AuthState extends State<Auth> {
   static late bool _canCheckBiometrics;
 
   String _text1 = '';
-  String _text2 =
-      'If the fingerprint sensor isn\'t working, disable it in\nyour device\'s settings.';
+  String _text2 = 'disableFingerprint'.tr();
   final LocalAuthentication auth = LocalAuthentication();
   Timer? _timer;
   int _start = 31;
@@ -33,54 +33,52 @@ class _AuthState extends State<Auth> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-          color: const Color(0xff111B21),
-          child: ListView(
-            padding: const EdgeInsets.only(top: 60),
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Icon(
-                    Icons.lock_rounded,
-                    color: Colors.teal,
-                    size: 50,
+      body: Container(
+        color: const Color(0xff111B21),
+        child: ListView(
+          padding: const EdgeInsets.only(top: 60),
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.lock_rounded,
+                  color: Colors.teal,
+                  size: 50,
+                ),
+                Gap(15.h),
+                Text(
+                  context.tr('appLocked'),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 28.sp,
                   ),
-                  Gap(15.h),
-                  Text(
-                    'Chat App Locked',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 28.sp,
-                    ),
-                  ),
-                  Gap(150.h),
-                  Icon(
-                    Icons.fingerprint_rounded,
-                    color: fingColor,
-                    size: 50,
-                  ),
-                  Gap(15.h),
-                  Text(
-                    _start != 0 || _start < 31 ? _text1 : '',
-                    style:
-                        TextStyles.font16Grey400Weight.copyWith(fontSize: 14),
-                    textAlign: TextAlign.center,
-                  ),
-                  Gap(10.h),
-                  Text(
-                    _start != 0 || _start < 31 ? _text2 : '',
-                    style: TextStyles.font16Grey400Weight
-                        .copyWith(fontSize: 14, height: 1.5),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            ],
-          ),
+                ),
+                Gap(150.h),
+                Icon(
+                  Icons.fingerprint_rounded,
+                  color: fingColor,
+                  size: 50,
+                ),
+                Gap(15.h),
+                Text(
+                  _start != 0 || _start < 31 ? _text1 : '',
+                  style: TextStyles.font16Grey400Weight.copyWith(fontSize: 14),
+                  textAlign: TextAlign.center,
+                ),
+                Gap(10.h),
+                Text(
+                  _start != 0 || _start < 31 ? _text2 : '',
+                  style: TextStyles.font16Grey400Weight
+                      .copyWith(fontSize: 14, height: 1.5),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ],
         ),
-     
+      ),
     );
   }
 
@@ -91,7 +89,6 @@ class _AuthState extends State<Auth> {
     }
     super.dispose();
   }
-
 
   @override
   void initState() {
@@ -114,7 +111,8 @@ class _AuthState extends State<Auth> {
           });
         } else {
           _start--;
-          _text1 = ' Too many attempts. Try again after $_start seconds.';
+          _text1 =
+              ' ${context.tr('tooManyAttempts', args: [_start.toString()])}';
           setState(() {});
         }
       },
@@ -126,8 +124,7 @@ class _AuthState extends State<Auth> {
     bool authenticated = false;
     try {
       authenticated = await auth.authenticate(
-        localizedReason:
-            'Scan your fingerprint (or face or whatever) to authenticate',
+        localizedReason: context.tr('enterFingerprint'),
         options: const AuthenticationOptions(
           stickyAuth: true,
           biometricOnly: true,
@@ -151,7 +148,7 @@ class _AuthState extends State<Auth> {
       if (e.code == 'PermanentlyLockedOut') {
         context.pop();
         _text2 = '';
-        _text1 = 'Too many attempts. Fingerprint sensor disabled.';
+        _text1 = context.tr('tooManyAttempts');
         setState(() {});
         return _authenticatePin();
       }
@@ -174,8 +171,7 @@ class _AuthState extends State<Auth> {
 
     try {
       authenticated = await auth.authenticate(
-        localizedReason:
-            'Scan your fingerprint (or face or whatever) to authenticate',
+        localizedReason: context.tr('pleaseEnterPin'),
         options: const AuthenticationOptions(
           stickyAuth: true,
         ),

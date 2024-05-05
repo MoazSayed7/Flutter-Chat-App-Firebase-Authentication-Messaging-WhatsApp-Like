@@ -1,4 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -42,19 +43,19 @@ class _PasswordResetState extends State<PasswordReset> {
 
   AppTextFormField emailField() {
     return AppTextFormField(
-      hint: 'Email',
+      hint: context.tr('email'),
       validator: (value) {
         if (value == null || value.isEmpty || !AppRegex.isEmailValid(value)) {
-          return 'Please enter a valid email';
+          return context.tr('pleaseEnterValid', args: ['Email']);
         }
       },
       controller: emailController,
     );
   }
 
-  AppTextButton resetButton(BuildContext context) {
-    return AppTextButton(
-      buttonText: 'Reset',
+  AppButton resetButton(BuildContext context) {
+    return AppButton(
+      buttonText: context.tr('reset'),
       textStyle: TextStyles.font15DarkBlue500Weight,
       onPressed: () async {
         if (formKey.currentState!.validate()) {
@@ -67,9 +68,8 @@ class _PasswordResetState extends State<PasswordReset> {
               context: context,
               dialogType: DialogType.info,
               animType: AnimType.rightSlide,
-              title: 'Reset Password',
-              desc:
-                  'Link to Reset password send to your email, please check inbox messages.',
+              title: context.tr('resetPassword'),
+              desc: context.tr('checkYourEmail'),
             ).show();
           } on FirebaseAuthException catch (e) {
             if (e.code == 'user-not-found') {
@@ -77,15 +77,15 @@ class _PasswordResetState extends State<PasswordReset> {
                 context: context,
                 dialogType: DialogType.error,
                 animType: AnimType.rightSlide,
-                title: 'Error',
-                desc: 'Email not found',
+                title: context.tr('error'),
+                desc: context.tr('emailNotFound'),
               ).show();
             } else {
               AwesomeDialog(
                 context: context,
                 dialogType: DialogType.error,
                 animType: AnimType.rightSlide,
-                title: 'Error',
+                title: context.tr('error'),
                 desc: e.message,
               ).show();
             }

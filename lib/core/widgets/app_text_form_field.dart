@@ -32,7 +32,6 @@ class AppTextFormField extends StatelessWidget {
         return validator(value);
       },
       onChanged: onChanged,
-      cursorColor: ColorsManager.greenPrimary,
       controller: controller,
       decoration: InputDecoration(
         hintText: hint,

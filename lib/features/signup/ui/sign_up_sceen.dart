@@ -1,7 +1,8 @@
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 
 import '../../../core/widgets/already_have_account_text.dart';
@@ -23,49 +24,61 @@ class BuildSignupScreen extends StatelessWidget {
       child: Padding(
         padding:
             EdgeInsets.only(left: 30.w, right: 30.w, bottom: 15.h, top: 5.h),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Create Account',
-                style: TextStyles.font24White600Weight,
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      context.tr('createAccount'),
+                      style: TextStyles.font24White600Weight,
+                    ),
+                    Gap(8.h),
+                    Text(
+                      context.tr('createAccountDesc'),
+                      style: TextStyles.font14Grey400Weight,
+                    ),
+                    Gap(8.h),
+                    EmailAndPassword(
+                      isSignUpPage: true,
+                    ),
+                    Gap(10.h),
+                    const SigninWithGoogleText(),
+                    Gap(5.h),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        InkWell(
+                          onTap: () async {
+                            await GoogleSignin.signInWithGoogle(context);
+                          },
+                          borderRadius: BorderRadius.circular(15.r),
+                          child: SvgPicture.asset(
+                            'assets/svgs/google.svg',
+                            width: 40.w,
+                            height: 40.h,
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
               ),
-              Gap(8.h),
-              Text(
-                'Sign up now and start exploring all that our\napp has to offer. We\'re excited to welcome\nyou to our community!',
-                style: TextStyles.font14Grey400Weight,
-              ),
-              Gap(8.h),
-              Column(
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Column(
+                mainAxisSize: MainAxisSize.min, // Ensure minimum height
                 children: [
-                  EmailAndPassword(
-                    isSignUpPage: true,
-                  ),
-                  Gap(10.h),
-                  const SigninWithGoogleText(),
-                  Gap(5.h),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        icon: const Icon(
-                          EvaIcons.google,
-                          color: Colors.white,
-                        ),
-                        onPressed: () async {
-                          await GoogleSignin.signInWithGoogle(context);
-                        },
-                      ),
-                    ],
-                  ),
                   const TermsAndConditionsText(),
                   Gap(15.h),
                   const AlreadyHaveAccountText(),
                 ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

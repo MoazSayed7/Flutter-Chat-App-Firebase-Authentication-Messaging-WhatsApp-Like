@@ -1,19 +1,17 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
-import '../features/camera/camera.dart';
+import '../features/camera/ui/camera.dart';
 import '../features/chat/ui/chat_page.dart';
 import '../features/create_password/ui/create_password.dart';
-import '../features/forget/ui/forget_screen.dart';
-import '../features/home/home_screen.dart';
-import '../features/linkeddevices/ui/linked_devices_screen.dart';
+import '../features/display_picture/ui/display_picture_screen.dart';
+import '../features/forget_password/ui/forget_screen.dart';
+import '../features/home/ui/home_screen.dart';
 import '../features/local_auth/auth.dart';
 import '../features/login/ui/login_screen.dart';
-import '../features/newbroadcast/ui/new_boardcast_screen.dart';
 import '../features/newgroup/ui/new_group_screen.dart';
-import '../features/settings/settings_screen.dart';
+import '../features/settings/ui/settings_screen.dart';
 import '../features/signup/ui/sign_up_sceen.dart';
-import '../features/starredMessages/starred_messages.dart';
 import '../features/update/ui/update.dart';
 import 'routes.dart';
 
@@ -49,11 +47,6 @@ class AppRoute {
           builder: (context) => const ForgetScreen(),
         );
 
-      case Routes.starredMessagesScreen:
-        return MaterialPageRoute(
-          builder: (context) => const StarredMessagesScreen(),
-        );
-
       case Routes.loginScreen:
         return MaterialPageRoute(
           builder: (context) => const LoginScreen(),
@@ -85,11 +78,6 @@ class AppRoute {
           builder: (context) => const NewGroupScreen(),
         );
 
-      case Routes.newBroadCastScreen:
-        return MaterialPageRoute(
-          builder: (context) => const NewBroadCastScreen(),
-        );
-
       case Routes.takePictureScreen:
         final argument = routeSettings.arguments;
         return MaterialPageRoute(
@@ -99,17 +87,17 @@ class AppRoute {
         );
 
       case Routes.displayPictureScreen:
-        final argument = routeSettings.arguments;
-        return MaterialPageRoute(
-          builder: (context) => DisplayPictureScreen(
-            image: argument as XFile,
-          ),
-        );
-
-      case Routes.linkedDevicesScreen:
-        return MaterialPageRoute(
-          builder: (context) => const LinkedDevicesScreen(),
-        );
+        final arguments = routeSettings.arguments;
+        if (arguments is List) {
+          return MaterialPageRoute(
+            builder: (context) => DisplayPictureScreen(
+              image: arguments[0] as XFile,
+              token: arguments[1] as String,
+              receivedMToken: arguments[2] as String,
+              receivedUserID: arguments[3] as String,
+            ),
+          );
+        }
 
       case Routes.homeScreen:
         return MaterialPageRoute(

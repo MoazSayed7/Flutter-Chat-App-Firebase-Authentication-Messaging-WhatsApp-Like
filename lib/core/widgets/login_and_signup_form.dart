@@ -1,5 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import '../../services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -36,14 +38,9 @@ class EmailAndPassword extends StatefulWidget {
 class _EmailAndPasswordState extends State<EmailAndPassword> {
   bool isObscureText = true;
 
-  bool hasLowercase = false;
-  bool hasUppercase = false;
-  bool hasSpecialCharacters = false;
-  bool hasNumber = false;
   bool hasMinLength = false;
 
   late final _auth = FirebaseAuth.instance;
-  late final _fireStore = FirebaseFirestore.instance;
 
   late TextEditingController nameController = TextEditingController();
   late TextEditingController emailController = TextEditingController();
@@ -69,10 +66,6 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
             forgetPasswordTextButton(context),
           Gap(10.h),
           PasswordValidations(
-            hasLowerCase: hasLowercase,
-            hasUpperCase: hasUppercase,
-            hasSpecialCharacters: hasSpecialCharacters,
-            hasNumber: hasNumber,
             hasMinLength: hasMinLength,
           ),
           Gap(20.h),
@@ -97,12 +90,12 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
     return Column(
       children: [
         AppTextFormField(
-          hint: 'Email',
+          hint: context.tr('email'),
           validator: (value) {
             if (value == null ||
                 value.isEmpty ||
                 !AppRegex.isEmailValid(value)) {
-              return 'Please enter a valid email';
+              return context.tr('pleaseEnterValid', args: ['Email']);
             }
           },
           controller: emailController,
@@ -118,9 +111,11 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
         context.pushNamed(Routes.forgetScreen);
       },
       child: Align(
-        alignment: Alignment.centerRight,
+        alignment: context.locale.toString() == 'ar'
+            ? Alignment.centerLeft
+            : Alignment.centerRight,
         child: Text(
-          'forget password?',
+          context.tr('forgetPassword'),
           style: TextStyles.font15Green500Weight,
         ),
       ),
@@ -140,7 +135,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
 
   AppButton loginButton(BuildContext context) {
     return AppButton(
-      buttonText: 'Login',
+      buttonText: context.tr('login'),
       textStyle: TextStyles.font15DarkBlue500Weight,
       onPressed: () async {
         if (formKey.currentState!.validate()) {
@@ -150,10 +145,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
               password: passwordController.text,
             );
             if (c.user!.emailVerified) {
-              await _fireStore
-                  .collection('users')
-                  .doc(_auth.currentUser!.uid)
-                  .set(
+              await DatabaseMethods.addUserDetails(
                 {
                   'name': _auth.currentUser!.displayName,
                   'email': _auth.currentUser!.email,
@@ -164,6 +156,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
                 },
                 SetOptions(merge: true),
               );
+
               if (!context.mounted) return;
               context.pushNamedAndRemoveUntil(
                 Routes.homeScreen,
@@ -177,8 +170,8 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
                 context: context,
                 dialogType: DialogType.info,
                 animType: AnimType.rightSlide,
-                title: 'Email Not Verified',
-                desc: 'Please check your email and verify your email.',
+                title: context.tr('emailNotVerified'),
+                desc: context.tr('emailNotVerifiedDesc'),
               ).show();
             }
           } on FirebaseAuthException catch (e) {
@@ -187,24 +180,24 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
                 context: context,
                 dialogType: DialogType.error,
                 animType: AnimType.rightSlide,
-                title: 'FireBase Error',
-                desc: 'No user found for that email.',
+                title: context.tr('error'),
+                desc: context.tr('userNotFound'),
               ).show();
             } else if (e.code == 'wrong-password') {
               AwesomeDialog(
                 context: context,
                 dialogType: DialogType.error,
                 animType: AnimType.rightSlide,
-                title: 'Error',
-                desc: 'Wrong password provided for that user.',
+                title: context.tr('error'),
+                desc: context.tr('wrongPassword'),
               ).show();
             } else {
               AwesomeDialog(
                 context: context,
                 dialogType: DialogType.error,
                 animType: AnimType.rightSlide,
-                title: 'Error',
-                desc: e.message,
+                title: context.tr('error'),
+                desc: e.code,
               ).show();
             }
           }
@@ -229,10 +222,10 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
     return Column(
       children: [
         AppTextFormField(
-          hint: 'Name',
+          hint: context.tr('name'),
           validator: (value) {
             if (value == null || value.isEmpty || value.startsWith(' ')) {
-              return 'Please enter a valid name';
+              return context.tr('pleaseEnterValid', args: ['Name']);
             }
           },
           controller: nameController,
@@ -244,7 +237,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
 
   AppButton passwordButton(BuildContext context) {
     return AppButton(
-      buttonText: 'Create Password',
+      buttonText: context.tr('createPassword'),
       textStyle: TextStyles.font15DarkBlue500Weight,
       onPressed: () async {
         if (formKey.currentState!.validate()) {
@@ -259,10 +252,8 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
                 .updateDisplayName(widget.googleUser!.displayName);
             await _auth.currentUser!
                 .updatePhotoURL(widget.googleUser!.photoUrl);
-            await _fireStore
-                .collection('users')
-                .doc(_auth.currentUser!.uid)
-                .set(
+
+            await DatabaseMethods.addUserDetails(
               {
                 'name': widget.googleUser!.displayName,
                 'profilePic': widget.googleUser!.photoUrl,
@@ -277,8 +268,8 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
               context: context,
               dialogType: DialogType.success,
               animType: AnimType.rightSlide,
-              title: 'Sign up Success',
-              desc: 'You have successfully signed up.',
+              title: context.tr('success'),
+              desc: context.tr('accountCreated'),
             ).show();
 
             if (!context.mounted) return;
@@ -293,16 +284,15 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
                 context: context,
                 dialogType: DialogType.error,
                 animType: AnimType.rightSlide,
-                title: 'Error',
-                desc:
-                    'This account already exists for that email go and login.',
+                title: context.tr('error'),
+                desc: context.tr('emailAlreadyExists'),
               ).show();
             } else {
               AwesomeDialog(
                 context: context,
                 dialogType: DialogType.error,
                 animType: AnimType.rightSlide,
-                title: 'Error',
+                title: context.tr('error'),
                 desc: e.message,
               ).show();
             }
@@ -311,7 +301,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
               context: context,
               dialogType: DialogType.error,
               animType: AnimType.rightSlide,
-              title: 'Error',
+              title: context.tr('error'),
               desc: e.toString(),
             ).show();
           }
@@ -323,7 +313,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
   Widget passwordConfirmationField() {
     return AppTextFormField(
       controller: passwordConfirmationController,
-      hint: 'Password Confirmation',
+      hint: context.tr('confirmPassword'),
       isObscureText: isObscureText,
       suffixIcon: GestureDetector(
         onTap: () {
@@ -338,12 +328,12 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
       ),
       validator: (value) {
         if (value != passwordController.text) {
-          return 'Enter a matched passwords';
+          return context.tr('passwordsDontMatch');
         }
         if (value == null ||
             value.isEmpty ||
             !AppRegex.isPasswordValid(value)) {
-          return 'Please enter a valid password';
+          return context.tr('pleaseEnterValid', args: ['Password']);
         }
       },
     );
@@ -352,7 +342,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
   AppTextFormField passwordField() {
     return AppTextFormField(
       controller: passwordController,
-      hint: 'Password',
+      hint: context.tr('password'),
       isObscureText: isObscureText,
       suffixIcon: GestureDetector(
         onTap: () {
@@ -369,7 +359,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
         if (value == null ||
             value.isEmpty ||
             !AppRegex.isPasswordValid(value)) {
-          return 'Please enter a valid password';
+          return context.tr('pleaseEnterValid', args: ['Password']);
         }
       },
     );
@@ -378,19 +368,14 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
   void setupPasswordControllerListener() {
     passwordController.addListener(() {
       setState(() {
-        hasLowercase = AppRegex.hasLowerCase(passwordController.text);
-        hasUppercase = AppRegex.hasUpperCase(passwordController.text);
-        hasSpecialCharacters =
-            AppRegex.hasSpecialCharacter(passwordController.text);
-        hasNumber = AppRegex.hasNumber(passwordController.text);
-        hasMinLength = AppRegex.hasMinLength(passwordController.text);
+        hasMinLength = AppRegex.isPasswordValid(passwordController.text);
       });
     });
   }
 
   AppButton signUpButton(BuildContext context) {
     return AppButton(
-      buttonText: "Create Account",
+      buttonText: context.tr('createAccount'),
       textStyle: TextStyles.font15DarkBlue500Weight,
       onPressed: () async {
         if (formKey.currentState!.validate()) {
@@ -401,10 +386,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
             );
             await _auth.currentUser!.updateDisplayName(nameController.text);
             await _auth.currentUser!.sendEmailVerification();
-            await _fireStore
-                .collection('users')
-                .doc(_auth.currentUser!.uid)
-                .set(
+            await DatabaseMethods.addUserDetails(
               {
                 'name': nameController.text,
                 'email': emailController.text,
@@ -414,14 +396,15 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
                 'isOnline': 'false',
               },
             );
+
             await _auth.signOut();
             if (!context.mounted) return;
             await AwesomeDialog(
               context: context,
               dialogType: DialogType.success,
               animType: AnimType.rightSlide,
-              title: 'Sign up Success',
-              desc: 'Don\'t forget to verify your email check inbox.',
+              title: context.tr('success'),
+              desc: context.tr('verifyYourEmail'),
             ).show();
 
             if (!context.mounted) return;
@@ -436,16 +419,15 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
                 context: context,
                 dialogType: DialogType.error,
                 animType: AnimType.rightSlide,
-                title: 'Error',
-                desc:
-                    'This account already exists for that email go and login.',
+                title: context.tr('error'),
+                desc: context.tr('emailAlreadyExists'),
               ).show();
             } else {
               AwesomeDialog(
                 context: context,
                 dialogType: DialogType.error,
                 animType: AnimType.rightSlide,
-                title: 'Error',
+                title: context.tr('error'),
                 desc: e.message,
               ).show();
             }
@@ -454,7 +436,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
               context: context,
               dialogType: DialogType.error,
               animType: AnimType.rightSlide,
-              title: 'Error',
+              title: context.tr('error'),
               desc: e.toString(),
             ).show();
           }

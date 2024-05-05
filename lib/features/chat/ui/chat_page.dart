@@ -1,16 +1,23 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:intl/intl.dart';
+import 'package:image_picker/image_picker.dart';
 
-import '../../../core/widgets/app_text_form_field.dart';
+import '../../../helpers/extensions.dart';
 import '../../../helpers/notifications.dart';
-import '../../../services/chat_service.dart';
+import '../../../router/routes.dart';
+import '../../../services/database.dart';
+import '../../../services/notification_service.dart';
+import '../../../themes/colors.dart';
+import '../../../themes/styles.dart';
 
 class ChatScreen extends StatefulWidget {
   final String receivedUserName;
@@ -32,14 +39,15 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  final _messageController = TextEditingController();
-  final _chatService = ChatService();
+  final _chatService = NotificationService();
   final _auth = FirebaseAuth.instance;
   final _scrollController = ScrollController();
-
   late String? token;
+  TextAlign textAlign = TextAlign.start;
 
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+  final _picker = ImagePicker();
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +90,9 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             Text(widget.receivedUserName),
             Text(
-              widget.active == 'true' ? 'Online' : 'Offline',
+              widget.active == 'true'
+                  ? context.tr('online')
+                  : context.tr('offline'),
               style: TextStyle(
                 fontSize: 13.sp,
                 color: const Color.fromARGB(255, 179, 178, 178),
@@ -91,15 +101,75 @@ class _ChatScreenState extends State<ChatScreen> {
           ],
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Expanded(
-              child: _buildMessagesList(),
-            ),
-            _buildMessageInput(),
-          ],
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/chat_backgrond.png"),
+            opacity: 0.1,
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 8.w),
+          child: Column(
+            children: [
+              Expanded(
+                child: _buildMessagesList(),
+              ),
+              MessageBar(
+                messageBarHitText: context.tr('message'),
+                messageBarHintStyle: TextStyles.font14Grey400Weight,
+                messageBarTextStyle: TextStyles.font18White500Weight.copyWith(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w400,
+                ),
+                messageBarColor: Colors.transparent,
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 10.w,
+                  vertical: 7.h,
+                ),
+                paddingTextAndSendButton: context.locale.toString() == 'en'
+                    ? EdgeInsets.only(left: 4.w)
+                    : EdgeInsets.only(right: 4.w),
+                onSend: (message) async {
+                  await DatabaseMethods.sendMessage(
+                    message,
+                    widget.receivedUserID,
+                  );
+                  scrollToDown();
+                  await _chatService.sendPushMessage(
+                    widget.receivedMToken,
+                    token!,
+                    message,
+                    _auth.currentUser!.displayName!,
+                    _auth.currentUser!.uid,
+                    _auth.currentUser!.photoURL,
+                  );
+                },
+                actions: [
+                  Padding(
+                    padding: context.locale.toString() == 'ar'
+                        ? EdgeInsets.only(left: 4.w)
+                        : EdgeInsets.only(right: 4.w),
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: Color(0xff00a884),
+                        shape: BoxShape.circle,
+                      ),
+                      child: IconButton(
+                        icon: const Icon(
+                          Icons.camera_alt,
+                          color: Colors.black,
+                          size: 28,
+                        ),
+                        onPressed: () => showOptions(),
+                      ),
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -107,9 +177,40 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void dispose() {
-    _messageController.dispose();
     _scrollController.dispose();
     super.dispose();
+  }
+
+//Image Picker function to get image from camera
+  Future getImageFromCamera() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.camera);
+
+    setState(() {
+      if (pickedFile != null) {
+        context.pushNamed(Routes.displayPictureScreen, arguments: [
+          pickedFile,
+          token!,
+          widget.receivedMToken,
+          widget.receivedUserID,
+        ]);
+      }
+    });
+  }
+
+//Image Picker function to get image from gallery
+  Future getImageFromGallery() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        context.pushNamed(Routes.displayPictureScreen, arguments: [
+          pickedFile,
+          token!,
+          widget.receivedMToken,
+          widget.receivedUserID,
+        ]);
+      }
+    });
   }
 
   getToken() async {
@@ -122,9 +223,7 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await Future.delayed(const Duration(milliseconds: 1000));
-      scrollTo(
-        _scrollController.position.maxScrollExtent,
-      );
+      scrollToDown();
       await HelperNotification.initialize(flutterLocalNotificationsPlugin);
     });
     getToken();
@@ -145,64 +244,33 @@ class _ChatScreenState extends State<ChatScreen> {
     return bidi;
   }
 
-  void scrollTo(double offset) {
+  void scrollToDown() {
     _scrollController.animateTo(
-      offset,
+      _scrollController.position.maxScrollExtent + 90.h,
       duration: const Duration(seconds: 1),
       curve: Curves.fastOutSlowIn,
     );
   }
 
-  void sendMessage() async {
-    late String message;
-    if (_messageController.text.isNotEmpty) {
-      message = _messageController.text;
-      _messageController.clear();
-      await _chatService.sendMessage(
-        message,
-        widget.receivedUserID,
-      );
-      scrollTo(
-        _scrollController.position.maxScrollExtent + 70.h,
-      );
-      await _chatService.sendPushMessage(
-        widget.receivedMToken,
-        token!,
-        message,
-        _auth.currentUser!.displayName!,
-        _auth.currentUser!.uid,
-        _auth.currentUser!.photoURL,
-      );
-    }
-  }
-
-  Widget _buildMessageInput() {
-    return SizedBox(
-      height: 70.h,
-      child: Row(
-        children: [
-          Expanded(
-            child: AppTextFormField(
-              hint: 'Message',
-              controller: _messageController,
-              validator: (_) {},
-            ),
+  Future showOptions() async {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (context) => CupertinoActionSheet(
+        actions: [
+          CupertinoActionSheetAction(
+            child: Text(context.tr('photoGallery')),
+            onPressed: () {
+              context.pop();
+              getImageFromGallery();
+            },
           ),
-          Gap(8.w),
-          Container(
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: Color(0xff00A884),
-            ),
-            child: IconButton(
-              onPressed: sendMessage,
-              icon: const Icon(
-                Icons.send,
-                color: Colors.white,
-                size: 25,
-              ),
-            ),
-          )
+          CupertinoActionSheetAction(
+            child: Text(context.tr('camera')),
+            onPressed: () {
+              context.pop();
+              getImageFromCamera();
+            },
+          ),
         ],
       ),
     );
@@ -223,26 +291,54 @@ class _ChatScreenState extends State<ChatScreen> {
         if (isNewDay)
           DateChip(
             date: data['timestamp'].toDate(),
-            color: const Color(0x558AD3D5),
+            color: const Color(0xff273443),
+            dateColor: ColorsManager.gray400,
           ),
-        BubbleSpecialThree(
-          text: data['message'],
-          color: const Color(0xff273443),
-          textAlign:
-              isArabic(data['message']) ? TextAlign.right : TextAlign.left,
-          sendTime: DateFormat("h:mm a").format(
-            data['timestamp'].toDate(),
+        if (data['message'].contains('https://'))
+          BubbleNormalImage(
+            id: data['timestamp'].toDate().toString(),
+            isArabicApp: context.locale.toString() == 'ar' ? true : false,
+            tail: isNewSender,
+            isSender: data['senderID'] == _auth.currentUser!.uid ? true : false,
+            color: data['senderID'] == _auth.currentUser!.uid
+                ? const Color.fromARGB(255, 0, 107, 84)
+                : const Color(0xff273443),
+            image: CachedNetworkImage(
+              imageUrl: data['message'],
+              placeholder: (context, url) =>
+                  Image.asset('assets/images/loading.gif'),
+              errorWidget: (context, url, error) =>
+                  const Icon(Icons.error_outline_rounded),
+            ),
           ),
-          tail: isNewSender ? true : false,
-          isSender: data['senderID'] == _auth.currentUser!.uid,
-        ),
+        if (!data['message'].contains('https://'))
+          BubbleSpecialThree(
+            text: data['message'],
+            color: data['senderID'] == _auth.currentUser!.uid
+                ? const Color.fromARGB(255, 0, 107, 84)
+                : const Color(0xff273443),
+            textAlign:
+                isArabic(data['message']) ? TextAlign.right : TextAlign.left,
+            sendTime: DateFormat("h:mm a").format(
+              data['timestamp'].toDate(),
+            ),
+            tail: isNewSender,
+            isSender: data['senderID'] == _auth.currentUser!.uid
+                ? context.locale.languageCode == 'ar'
+                    ? false
+                    : true
+                : context.locale.languageCode == 'ar'
+                    ? true
+                    : false,
+          ),
       ],
     );
   }
 
   Widget _buildMessagesList() {
     late Stream<QuerySnapshot<Object?>> allMessages =
-        _chatService.getMessages(widget.receivedUserID, _auth.currentUser!.uid);
+        DatabaseMethods.getMessages(
+            widget.receivedUserID, _auth.currentUser!.uid);
 
     return StreamBuilder(
       stream: allMessages,

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -13,20 +14,20 @@ class TermsAndConditionsText extends StatelessWidget {
       text: TextSpan(
         children: [
           TextSpan(
-            text: 'By logging, you agree to our',
+            text: context.tr('terms1'),
             style: TextStyles.font11MediumLightShadeOfGray400Weight,
           ),
           TextSpan(
-            text: ' Terms & Conditions',
+            text: ' ${context.tr('terms2')}',
             style: TextStyles.font11Green500Weight,
           ),
           TextSpan(
-            text: ' and',
+            text: ' ${context.tr('terms3')}',
             style: TextStyles.font11MediumLightShadeOfGray400Weight
                 .copyWith(height: 4.h),
           ),
           TextSpan(
-            text: ' PrivacyPolicy.',
+            text: ' ${context.tr('terms4')}',
             style: TextStyles.font11Green500Weight,
           ),
         ],

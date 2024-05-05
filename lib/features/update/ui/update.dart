@@ -1,5 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
@@ -37,11 +38,11 @@ class _UpdateScreenState extends State<UpdateScreen> {
       context: context,
       dialogType: DialogType.warning,
       animType: AnimType.scale,
-      title: 'Update',
-      desc: 'Update Available. Download and Install',
-      btnCancelText: 'Exit',
+      title: context.tr('update'),
+      desc: context.tr('updateDesc'),
+      btnCancelText: context.tr('exit'),
       btnCancelOnPress: () => SystemNavigator.pop(),
-      btnOkText: 'Update',
+      btnOkText: context.tr('update'),
       btnOkOnPress: () async {
         DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
             .collection('version')
@@ -54,7 +55,6 @@ class _UpdateScreenState extends State<UpdateScreen> {
 
   Future<void> _launchURL(String myUrl) async {
     final Uri url = Uri.parse(myUrl);
-
     if (!await launchUrl(url)) {
       throw Exception('Could not launch $url');
     }

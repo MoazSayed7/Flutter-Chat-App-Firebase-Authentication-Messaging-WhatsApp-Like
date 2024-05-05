@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline/flutter_offline.dart';
@@ -36,7 +37,7 @@ class BuildCreatePasswordScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Create Password',
+                      context.tr('createPassword'),
                       style: TextStyles.font24White600Weight,
                     ),
                     Gap(10.h),

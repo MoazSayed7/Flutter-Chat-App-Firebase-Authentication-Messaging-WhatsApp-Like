@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../helpers/extensions.dart';
@@ -21,11 +22,11 @@ class AlreadyHaveAccountText extends StatelessWidget {
         text: TextSpan(
           children: [
             TextSpan(
-              text: 'Already have an account?',
+              text: context.tr('alreadyHaveAccount'),
               style: TextStyles.font11MediumLightShadeOfGray400Weight,
             ),
             TextSpan(
-              text: ' Login',
+              text: context.tr('login'),
               style: TextStyles.font11Green500Weight,
             ),
           ],

@@ -1,17 +1,18 @@
 import 'package:camera/camera.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../../services/database.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logger/logger.dart';
 
-import '../../helpers/extensions.dart';
-import '../../router/routes.dart';
-import '../../themes/colors.dart';
-import '../tabs/calls_tab.dart';
-import '../tabs/chat_tab.dart';
-import '../tabs/updates_tab.dart';
+import '../../../helpers/extensions.dart';
+import '../../../router/routes.dart';
+import '../../../themes/colors.dart';
+import '../../tabs/calls_tab.dart';
+import '../../tabs/chat_tab.dart';
+import '../../tabs/updates_tab.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -22,7 +23,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   final _auth = FirebaseAuth.instance;
-  final _firestore = FirebaseFirestore.instance;
   var logger = Logger();
 
   @override
@@ -38,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           ),
         ),
         appBar: AppBar(
-          title: const Text('ChatApp'),
+          title: Text(context.tr('title')),
           bottom: TabBar(
             indicatorColor: ColorsManager.greenPrimary,
             indicatorWeight: 3.5,
@@ -46,10 +46,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             dividerColor: Colors.transparent,
             labelColor: ColorsManager.greenPrimary,
             unselectedLabelColor: const Color(0xffffffff).withOpacity(0.5),
-            tabs: const [
-              Tab(text: 'Chats'),
-              Tab(text: 'Updates'),
-              Tab(text: 'Calls'),
+            tabs: [
+              Tab(text: context.tr('chats')),
+              Tab(text: context.tr('updates')),
+              Tab(text: context.tr('calls')),
             ],
           ),
           actions: [
@@ -86,47 +86,22 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) async {
-        await _firestore.collection('users').doc(_auth.currentUser!.uid).update(
-          {
-            'isOnline': 'true',
-          },
-        );
-        await setupInteractedMessage();
-      },
-    );
-  }
-
-  @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     switch (state) {
       case AppLifecycleState.resumed:
-        await _firestore.collection('users').doc(_auth.currentUser!.uid).update(
-          {
-            'isOnline': 'true',
-          },
-        );
+        await DatabaseMethods.updateUserDetails({'isOnline': 'true'});
+
         break;
       case AppLifecycleState.inactive:
       case AppLifecycleState.detached:
       case AppLifecycleState.hidden:
       case AppLifecycleState.paused:
-        await _firestore.collection('users').doc(_auth.currentUser!.uid).update(
-          {
-            'isOnline': 'false',
-          },
-        );
+        await DatabaseMethods.updateUserDetails({'isOnline': 'false'});
+
         break;
       default:
-        await _firestore.collection('users').doc(_auth.currentUser!.uid).update(
-          {
-            'isOnline': 'false',
-          },
-        );
+        await DatabaseMethods.updateUserDetails({'isOnline': 'false'});
+
         break;
     }
   }
@@ -135,6 +110,18 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   void dispose() {
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) async {
+        await DatabaseMethods.updateUserDetails({'isOnline': 'true'});
+        await setupInteractedMessage();
+      },
+    );
   }
 
   Future<void> setupInteractedMessage() async {
@@ -160,45 +147,18 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           onTap: () {
             context.pushNamed(Routes.newGroupScreen);
           },
-          child: const Text(
-            'New group',
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-        PopupMenuItem(
-          onTap: () {
-            context.pushNamed(Routes.newBroadCastScreen);
-          },
-          child: const Text(
-            'New broadcast',
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-        PopupMenuItem(
-          onTap: () {
-            context.pushNamed(Routes.linkedDevicesScreen);
-          },
-          child: const Text(
-            'Linked devices',
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-        PopupMenuItem(
-          onTap: () {
-            context.pushNamed(Routes.starredMessagesScreen);
-          },
-          child: const Text(
-            'Starred messages',
-            style: TextStyle(color: Colors.white),
+          child: Text(
+            context.tr('newGroup'),
+            style: const TextStyle(color: Colors.white),
           ),
         ),
         PopupMenuItem(
           onTap: () {
             context.pushNamed(Routes.settingsScreen);
           },
-          child: const Text(
-            'Settings',
-            style: TextStyle(color: Colors.white),
+          child: Text(
+            context.tr('settings'),
+            style: const TextStyle(color: Colors.white),
           ),
         ),
         PopupMenuItem(
@@ -217,9 +177,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               );
             }
           },
-          child: const Text(
-            'Signout',
-            style: TextStyle(color: Colors.white),
+          child: Text(
+            context.tr('signOut'),
+            style: const TextStyle(color: Colors.white),
           ),
         ),
       ],

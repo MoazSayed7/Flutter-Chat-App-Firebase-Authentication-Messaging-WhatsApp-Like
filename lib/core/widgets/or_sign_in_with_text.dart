@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -19,7 +20,7 @@ class SigninWithGoogleText extends StatelessWidget {
         BuildDivider.buildDivider(),
         Gap(5.w),
         Text(
-          'or Sign in with',
+          context.tr('orSignInWith'),
           style: TextStyles.font13MediumLightShadeOfGray400Weight,
         ),
         Gap(5.w),

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -25,23 +26,16 @@ class BuildForgetScreen extends StatelessWidget {
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Reset',
-                            style: TextStyles.font24White600Weight,
-                          ),
-                          Gap(10.h),
-                          Text(
-                            "Enter email to reset password",
-                            style: TextStyles.font14Grey400Weight,
-                          ),
-                        ],
-                      ),
+                    Text(
+                      context.tr('reset'),
+                      style: TextStyles.font24White600Weight,
+                    ),
+                    Gap(10.h),
+                    Text(
+                      context.tr('enterEmailToResetPassword'),
+                      style: TextStyles.font14Grey400Weight,
                     ),
                     Gap(20.h),
                     const PasswordReset(),

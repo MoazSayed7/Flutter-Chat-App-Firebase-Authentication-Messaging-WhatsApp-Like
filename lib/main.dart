@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:logger/logger.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -12,10 +14,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
 import 'router/app_routes.dart';
 import 'router/routes.dart';
+import 'services/database.dart';
 import 'themes/colors.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
+  // Initialize EasyLocalization
+  await EasyLocalization.ensureInitialized();
 
   // Initialize Firebase
   await Firebase.initializeApp(
@@ -30,7 +37,14 @@ Future<void> main() async {
 
   // Run App
   runApp(
-    MyApp(appRoute: AppRoute()),
+    EasyLocalization(
+      supportedLocales: const [Locale('ar'), Locale('en')],
+      path: 'assets/translations',
+      startLocale: const Locale('ar'),
+      child: MyApp(
+        appRoute: AppRoute(),
+      ),
+    ),
   );
 }
 
@@ -38,19 +52,19 @@ late String? initialRoute;
 
 Future<void> initApp() async {
   final logger = Logger();
-  final auth = FirebaseAuth.instance;
-  final fireStore = FirebaseFirestore.instance;
 
   // Compare Versions
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
-  DocumentSnapshot newestVersionDetails =
-      await fireStore.collection('version').doc('newest').get();
+  DocumentSnapshot newestVersionDetails = await FirebaseFirestore.instance
+      .collection('version')
+      .doc('newest')
+      .get();
   Version newestVersion = Version.parse(newestVersionDetails['version']);
   Version currentVersion = Version.parse(packageInfo.version);
   int compareResult = newestVersion.compareTo(currentVersion);
 
   // handle initial route
-  auth.authStateChanges().listen(
+  FirebaseAuth.instance.authStateChanges().listen(
     (user) async {
       if (compareResult == 0) {
         if (user == null || !user.emailVerified) {
@@ -79,11 +93,8 @@ Future<void> initApp() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   message.onTokenRefresh.listen(
-    (fcmToken) {
-      fireStore
-          .collection('users')
-          .doc(auth.currentUser!.uid)
-          .update({'mtoken': fcmToken});
+    (fcmToken) async {
+      await DatabaseMethods.updateUserDetails({'mtoken': fcmToken});
     },
   ).onError(
     (err) {
@@ -114,9 +125,18 @@ class _MyAppState extends State<MyApp> {
       minTextAdapt: true,
       splitScreenMode: true,
       child: MaterialApp(
-        title: 'Chat App',
+        title: 'Chat Chat',
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        locale: context.locale,
         theme: ThemeData(
           useMaterial3: true,
+          primaryColor: ColorsManager.greenPrimary,
+          textSelectionTheme: const TextSelectionThemeData(
+            cursorColor: ColorsManager.greenPrimary,
+            selectionHandleColor: ColorsManager.greenPrimary,
+            selectionColor: Color.fromARGB(209, 0, 168, 132),
+          ),
           progressIndicatorTheme: const ProgressIndicatorThemeData(
             color: ColorsManager.greenPrimary,
           ),
@@ -134,5 +154,11 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    FlutterNativeSplash.remove();
   }
 }
