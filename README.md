@@ -1,7 +1,7 @@
 [![Stand With Palestine](https://raw.githubusercontent.com/TheBSD/StandWithPalestine/main/banner-no-action.svg)](https://thebsd.github.io/StandWithPalestine)
 
 
-# 📱 Flutter WhatsApp-like Chat App
+# 📱 Flutter WhatsApp-like Chat Chat App
 
 ## Overview
 
@@ -14,6 +14,7 @@ This Flutter project is a chat application inspired by WhatsApp. The app feature
     <body>
         <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/7c602d05-8f31-4d3c-8d68-c565cedbb167" alt="drawing" style="width:250px;"/>
         <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/05f671fa-1307-4998-ab9a-0f4c073aae74" alt="drawing" style="width:250px;"/>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/56647ac8-b9fd-41f4-9aa9-e531b6b6607c" alt="drawing" style="width:250px;"/>
       </body>
 </HTML>
 
@@ -22,12 +23,13 @@ This Flutter project is a chat application inspired by WhatsApp. The app feature
 ### SignUp using Email & Password Screen
 <HTML>
     <body>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/6a7407df-504c-41f2-94f2-5668a14e685b" alt="drawing" style="width:250px;"/>
         <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/1cc7b06d-f7b2-4ea8-8895-faa002588433" alt="drawing" style="width:250px;"/>
         <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/6898582c-fe9f-4168-acd1-55e15219fdfb" alt="drawing" style="width:250px;"/>
+      <br/>
+      <br/>
+      <br/>
         <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/e12a3e09-384f-4ae7-af0d-159c87be9ec9" alt="drawing" style="width:250px;"/>
-      <br/>
-      <br/>
-      <br/>
         <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/9e1f9c54-a438-4e4e-a3a8-c7f84a63466a" alt="drawing" style="width:250px;"/>
     </body>
 </HTML>
@@ -38,6 +40,7 @@ This Flutter project is a chat application inspired by WhatsApp. The app feature
 
 <HTML>
     <body>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/e9154925-34bb-4aa7-86a2-0031c540d444" alt="drawing" style="width:250px;"/>
         <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/c950c7dc-f50c-4c9c-975e-f7e6abd60ba6" alt="drawing" style="width:250px;"/>
         <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/472d4063-88a9-488d-9a77-96bb16e5432d" alt="drawing" style="width:250px;"/>
     </body>
@@ -49,8 +52,12 @@ This Flutter project is a chat application inspired by WhatsApp. The app feature
 
 <HTML>
     <body>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/817baebb-6dcc-4acb-a121-2b40bc279acb" alt="drawing" style="width:250px;"/>
         <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/f611aabb-3a7a-40d3-9913-34d82c49ff14" alt="drawing" style="width:250px;"/>
         <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/cad93a1c-538f-4e31-b19b-a6ba890ee6e6" alt="drawing" style="width:250px;"/>
+        <br/>
+        <br/>
+        <br/>
         <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/9bd02d42-86a9-4195-a9b1-7aeaaed92f2e" alt="drawing" style="width:250px;"/>
     </body>
 </HTML>
@@ -60,6 +67,7 @@ This Flutter project is a chat application inspired by WhatsApp. The app feature
 ### Reset Password Screen
 <HTML>
     <body>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/066c809b-f7a1-4a02-94b5-48aa9b06f6fc" alt="drawing" style="width:250px;"/>
         <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/e112a7fe-be28-40a8-b108-8f7d0def4556" alt="drawing" style="width:250px;"/>
         <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/7d3ff005-98f6-483c-9c5f-b476eda97c18" alt="drawing" style="width:250px;"/>
     </body>
@@ -70,8 +78,9 @@ This Flutter project is a chat application inspired by WhatsApp. The app feature
 ### Home Screen
 <HTML>
     <body>
-        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/9de3efd6-2790-41bd-b055-5bfac3b4b4ff" alt="drawing" style="width:250px;"/>
-        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/78bf351e-817f-462e-97a6-ca1f82d5b472" alt="drawing" style="width:250px;"/>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/728643a7-dae5-4afd-843f-cc52c782cc1b" alt="drawing" style="width:250px;"/>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/fca11d40-e36e-467b-aeb3-fd7c71d2d3d4" alt="drawing" style="width:250px;"/>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/c7730983-4dbf-4f5a-82bf-3d7ebd420958" alt="drawing" style="width:250px;"/>
     </body>
 </HTML>
 
@@ -80,8 +89,9 @@ This Flutter project is a chat application inspired by WhatsApp. The app feature
 ### Settings Screen
 <HTML>
     <body>
-        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/e56de1c9-dabc-473e-8013-cac03ce3f5ee" alt="drawing" style="width:250px;"/>
-        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/41ef5328-6bf6-444f-914d-beb739091d6d" alt="drawing" style="width:250px;"/>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/0903c423-ae48-4e4f-b824-35e66b95859a" alt="drawing" style="width:250px;"/>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/961764ab-aa39-4358-9c49-46642c61a25b" alt="drawing" style="width:250px;"/>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/5c4007b0-e594-468c-94e8-2fb7d46aacb4" alt="drawing" style="width:250px;"/>
     </body>
 </HTML>
 
@@ -90,20 +100,28 @@ This Flutter project is a chat application inspired by WhatsApp. The app feature
 ### Chat Screen
 <HTML>
     <body>
-        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/59048556-34bc-4f75-bc40-19a588518f33" alt="drawing" style="width:250px;"/>
-        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/631b39e8-a739-45c6-81ba-2f50b902b69f" alt="drawing" style="width:250px;"/>
-        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/629b9897-f87b-4bfd-b3fd-1b36637d81ab" alt="drawing" style="width:250px;"/>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/05581d7d-1543-47df-a42b-9c076effdc6f" alt="drawing" style="width:250px;"/>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/3d138ba2-cd1f-4cb4-bb4c-afc56cc72387" alt="drawing" style="width:250px;"/>
+        <br/>
+        <br/>
+        <br/>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/5d4b01b8-8aeb-43ab-935c-0fd57077eb80" alt="drawing" style="width:250px;"/>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/c5917daa-66dc-4ccf-9d04-67384061609d" alt="drawing" style="width:250px;"/>
     </body>
 </HTML>
 
 ---
 
-### Camera Screen
+### Select Image
 <HTML>
     <body>
-        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/eae1a293-cece-4e88-8e59-b27afe9e3c94" alt="drawing" style="width:250px;"/>
-        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/a2fb8799-0ea0-4ea4-8ac0-8447ec6d2553" alt="drawing" style="width:250px;"/>
-        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/dc9194b9-5375-488f-8df4-b2e713c2ff6d" alt="drawing" style="width:250px;"/>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/bcce51d3-1d24-4819-977d-33a939f32dfc" alt="drawing" style="width:250px;"/>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/1b4345a9-0057-42af-b4de-59b2d3b6ef67" alt="drawing" style="width:250px;"/>
+        <br/>
+        <br/>
+        <br/>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/029149ef-bfd5-48ae-8cf7-fb0fd2c8fc92" alt="drawing" style="width:250px;"/>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/9e93edda-23f3-47ca-9ed8-bdab22389e0c" alt="drawing" style="width:250px;"/>
     </body>
 </HTML>
 
@@ -112,8 +130,9 @@ This Flutter project is a chat application inspired by WhatsApp. The app feature
 ### Local Auth Screen (Fingerprint & FaceID)
 <HTML>
     <body>
-        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/6616b902-7ac5-4249-83dc-cb54c314d153" alt="drawing" style="width:250px;"/>
-        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/b5d6f62c-12c9-44bf-ab6d-d95a52f340df" alt="drawing" style="width:250px;"/>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/5031ade5-8105-4467-af19-09077cf56091" alt="drawing" style="width:250px;"/>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/9c160fa2-3247-472d-a0e2-709bf87fbad3" alt="drawing" style="width:250px;"/>
+        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/0a3a969c-c2f7-455e-8ed7-f8b374eb05f2" alt="drawing" style="width:250px;"/>
     </body>
 </HTML>
 
@@ -155,38 +174,47 @@ This Flutter project is a chat application inspired by WhatsApp. The app feature
 
 - **Security:**
   - App lock feature using fingerprint or face ID with `local_auth` package.
-  - Fingerprint/face ID attempts limited to prevent unauthorized access.
+  - Fingerprint/face ID attempts are limited to prevent unauthorized access.
   - Lock screen request after multiple unsuccessful attempts.
 
 - **Settings:**
   - Accessible from the home page's three dots menu.
   - Option to enable/disable app lock with a Cupertino switch.
+  - Option to Change App Language
 
 - **Camera Integration:**
   - Capture high-quality photos using the device's camera.
   - Save pictures on the device.
+  - Send photos
 
 ## Dependencies
 
 - `awesome_dialog`: Provides versatile dialogs for various use cases.
-- `camera`: Enables camera interaction and image capture.
+- `cached_network_image`: Library to load and cache network images.
 - `chat_bubbles`: Simplifies chat message UI creation.
 - `cloud_firestore`: Integrates with Firebase Firestore for data storage and retrieval.
 - `dio`: HTTP client for making API requests.
-- `eva_icons_flutter`: Provides additional icons beyond the core Flutter icons.
+- `easy_localization`: Internationalizing and localization App.
 - `firebase_auth`: Manages user authentication with Firebase.
 - `firebase_core`: Initializes the Firebase connection.
 - `firebase_messaging`: Enables FCM for notifications.
+- `firebase_storage`: Plugin for Firebase Cloud Storage.
 - `flutter_local_notifications`: Presents local notifications when the app is in the foreground.
+- `flutter_native_splash`: Customize the App's default white native splash screen with background color and splash image.
 - `flutter_offline`: Handles offline connectivity scenarios.
 - `flutter_screenutil`: Adapts UI elements to different screen sizes.
+- `flutter_speed_dial`: Plugin to implement a beautiful and dynamic Material Design Speed Dial with labels.
+- `flutter_svg`: An SVG rendering and widget library.
 - `gap`: Simplifies spacing management in layouts.
 - `google_sign_in`: Facilitates Google Sign-In authentication.
 - `googleapis_auth`: Obtain Access credentials for Google services using OAuth 2.0.
+- `image_picker`: Plugin for selecting images from the image library, and taking new pictures with the camera.
 - `intl`: Internationalization and localization support.
 - `local_auth`: Enables fingerprint and Face ID authentication.
 - `logger`: Assists with logging messages for debugging.
 - `shared_preferences`: Stores simple data locally on the device.
+- `pretty_dio_logger`: A Dio interceptor that logs network calls in a pretty, easy-to-read format.
+- `modal_bottom_sheet`: Create awesome and powerful modal bottom sheets.
 - `lottie`: Render After Effects animations natively on Flutter.
 - `package_info_plus`: Querying information about the application package.
 - `pub_semver`: in this App to compare versions.
@@ -224,31 +252,50 @@ I have made custom modifications to the `chat_bubbles` package
 
 #### Implementation Details
 
-I have already uploaded the edited `bubble_special_three.dart` file to my project. You can find it in the following path:
+I have already uploaded the edited files to my project. You can find it in the following path:
 
 ```
+removeable/bubble_normal_image.dart
 removeable/bubble_special_three.dart
+removeable/date_chip.dart
+removeable/message_bar.dart
 ```
 
 #### How to Apply Changes
 
-1. Download the edited `bubble_special_three.dart` file.
+1. Download the edited files.
 
-2. Replace the existing `bubble_special_three.dart` file in your Flutter project with the downloaded file.
+2. Replace the existing files in your Flutter project with the downloaded files.
 
-   - navigate to:
+   - For `bubble_special_three.dart` and `bubble_normal_image.dart`, navigate to:
      ```
-     %LocalAppData%\Pub\Cache\hosted\pub.dev\chat_bubbles-1.6.0\lib\bubbles\bubble_special_three.dart
+     %LocalAppData%\Pub\Cache\hosted\pub.dev\chat_bubbles-1.5.0\lib\bubbles\
      ```
-   - Delete the existing `bubble_special_three.dart` file and replace it with the downloaded file from my repository.
+   
+   - For `date_chip.dart`, navigate to:
+     ```
+     %LocalAppData%\Pub\Cache\hosted\pub.dev\chat_bubbles-1.5.0\lib\date_chips\
+     ```
+   
+   - For `message_bar.dart`, navigate to:
+     ```
+     %LocalAppData%\Pub\Cache\hosted\pub.dev\chat_bubbles-1.5.0\lib\message_bars\
+     ```
 
 ---
 
-7. Update app's launcher icon:
+7. Update the app's launcher icon:
+   
 ```bash
 dart run flutter_launcher_icons
 ```
-8. Run the app:
+8. Update the app's splash screen:
+
+```bash
+dart run flutter_native_splash:create --path=flutter_native_splash.yaml
+```
+
+9. Run the app:
 
 ```bash
 flutter run
