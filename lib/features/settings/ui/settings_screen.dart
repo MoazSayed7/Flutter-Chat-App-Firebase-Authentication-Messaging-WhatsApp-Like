@@ -7,8 +7,8 @@ import 'package:local_auth/local_auth.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../themes/styles.dart';
 import '../../../core/widgets/modal_fit.dart';
+import '../../../themes/styles.dart';
 
 const bool keyAuthScreenDefaultValue = false;
 
@@ -24,8 +24,7 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   bool _isAuthScreenEnabled = false;
   final LocalAuthentication auth = LocalAuthentication();
-
-  _SupportState _supportState = _SupportState.unknown;
+  late List<BiometricType> availableBiometric;
 
   @override
   Widget build(BuildContext context) {
@@ -67,11 +66,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 onChanged: (value) {
                   setState(
                     () {
-                      if (_supportState != _SupportState.supported) {
+                      if (availableBiometric.isEmpty) {
                         AwesomeDialog(
                           context: context,
                           dialogType: DialogType.error,
-                          headerAnimationLoop: false,
                           animType: AnimType.topSlide,
                           showCloseIcon: true,
                           closeIcon: const Icon(Icons.close_rounded),
@@ -96,13 +94,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   void initState() {
     super.initState();
-    auth.isDeviceSupported().then(
-          (bool isSupported) => setState(
-            () => _supportState = isSupported
-                ? _SupportState.supported
-                : _SupportState.unsupported,
-          ),
-        );
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await auth.getAvailableBiometrics().then((value) {
+        availableBiometric = value;
+      });
+    });
     _loadAuthScreenPreference();
   }
 
@@ -114,17 +110,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _setAuthScreenPreference(bool value) async {
-    if (_supportState != _SupportState.supported) {
-      return;
-    } else {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setBool(keyAuthScreenEnabled, value);
-    }
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(keyAuthScreenEnabled, value);
   }
-}
-
-enum _SupportState {
-  unknown,
-  supported,
-  unsupported,
 }

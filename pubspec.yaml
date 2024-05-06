@@ -10,7 +10,6 @@ environment:
 dependencies:
   awesome_dialog: ^3.2.0
   cached_network_image: ^3.3.1
-  camera: ^0.10.5+9
   chat_bubbles: ^1.5.0
   cloud_firestore: ^4.17.2
   cupertino_icons: ^1.0.8
@@ -34,7 +33,6 @@ dependencies:
   image_picker: ^1.1.1
   intl: ^0.18.1
   local_auth: ^2.2.0
-  logger: ^2.2.0
   lottie: ^3.1.0
   modal_bottom_sheet: ^3.0.0
   package_info_plus: ^7.0.0

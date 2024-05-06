@@ -1,4 +1,4 @@
-import 'package:camera/camera.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../services/database.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -6,7 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:logger/logger.dart';
 
 import '../../../helpers/extensions.dart';
 import '../../../router/routes.dart';
@@ -24,7 +23,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   final _auth = FirebaseAuth.instance;
-  var logger = Logger();
+  final _picker = ImagePicker();
 
   @override
   Widget build(BuildContext context) {
@@ -58,13 +57,18 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               icon: const Icon(Icons.camera_alt_outlined),
               color: Colors.white,
               onPressed: () async {
-                final cameras = await availableCameras();
-                final firstCamera = cameras.first;
-                if (!context.mounted) return;
-                context.pushNamed(
-                  Routes.takePictureScreen,
-                  arguments: firstCamera,
-                );
+                final pickedFile =
+                    await _picker.pickImage(source: ImageSource.camera);
+
+                if (pickedFile != null) {
+                  if (!context.mounted) return;
+                  context.pushNamed(Routes.displayPictureScreen, arguments: [
+                    pickedFile,
+                    '',
+                    '',
+                    '',
+                  ]);
+                }
               },
             ),
             IconButton(
@@ -166,8 +170,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           onTap: () async {
             try {
               await GoogleSignIn().disconnect();
-            } catch (e) {
-              logger.e(e.toString());
             } finally {
               await DatabaseMethods.updateUserDetails({'isOnline': 'false'});
 

@@ -12,8 +12,6 @@ class ModalFit extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-        child: SafeArea(
-      top: false,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -50,6 +48,6 @@ class ModalFit extends StatelessWidget {
           ),
         ],
       ),
-    ));
+    );
   }
 }

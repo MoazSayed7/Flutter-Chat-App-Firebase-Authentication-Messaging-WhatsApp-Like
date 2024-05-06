@@ -6,7 +6,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:logger/logger.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -51,8 +50,6 @@ Future<void> main() async {
 late String? initialRoute;
 
 Future<void> initApp() async {
-  final logger = Logger();
-
   // Compare Versions
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
   DocumentSnapshot newestVersionDetails = await FirebaseFirestore.instance
@@ -92,15 +89,9 @@ Future<void> initApp() async {
   // listen for messages when the app is in the background or terminated
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  message.onTokenRefresh.listen(
-    (fcmToken) async {
-      await DatabaseMethods.updateUserDetails({'mtoken': fcmToken});
-    },
-  ).onError(
-    (err) {
-      logger.e(err);
-    },
-  );
+  message.onTokenRefresh.listen((fcmToken) async {
+    await DatabaseMethods.updateUserDetails({'mtoken': fcmToken});
+  });
 }
 
 @pragma('vm:entry-point')

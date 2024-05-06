@@ -2,14 +2,11 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 
 import '../core/networking/dio_factory.dart';
 import '../helpers/access_token.dart';
 
 class NotificationService extends ChangeNotifier {
-  var logger = Logger();
-
   Future<void> sendPushMessage(
     String receiverMToken,
     String senderMToken,
@@ -41,7 +38,7 @@ class NotificationService extends ChangeNotifier {
     });
 
     Dio dio = DioFactory.getDio();
-    var response = await dio.request(
+    await dio.request(
       'https://fcm.googleapis.com/v1/projects/chatappmoaz/messages:send',
       options: Options(
         method: 'POST',
@@ -49,9 +46,5 @@ class NotificationService extends ChangeNotifier {
       ),
       data: data,
     );
-
-    if (response.statusCode != 200) {
-      logger.e(response.statusMessage);
-    }
   }
 }

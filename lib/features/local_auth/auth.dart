@@ -1,13 +1,11 @@
 import 'dart:async';
 
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:logger/logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../helpers/extensions.dart';
 import '../../router/routes.dart';
@@ -21,14 +19,12 @@ class Auth extends StatefulWidget {
 }
 
 class _AuthState extends State<Auth> {
-  static late bool _canCheckBiometrics;
-
+  late List<BiometricType> availableBiometric;
   String _text1 = '';
-  String _text2 = 'disableFingerprint'.tr();
+
   final LocalAuthentication auth = LocalAuthentication();
   Timer? _timer;
   int _start = 31;
-  var logger = Logger();
   Color fingColor = Colors.grey;
   @override
   Widget build(BuildContext context) {
@@ -37,6 +33,7 @@ class _AuthState extends State<Auth> {
         color: const Color(0xff111B21),
         child: ListView(
           padding: const EdgeInsets.only(top: 60),
+          physics: const BouncingScrollPhysics(),
           children: [
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -69,7 +66,9 @@ class _AuthState extends State<Auth> {
                 ),
                 Gap(10.h),
                 Text(
-                  _start != 0 || _start < 31 ? _text2 : '',
+                  _start != 0 || _start < 31
+                      ? context.tr('disableFingerprint')
+                      : '',
                   style: TextStyles.font16Grey400Weight
                       .copyWith(fontSize: 14, height: 1.5),
                   textAlign: TextAlign.center,
@@ -93,9 +92,18 @@ class _AuthState extends State<Auth> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(microseconds: 2), () async {});
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _checkBiometrics();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await auth.getAvailableBiometrics().then((value) async {
+        availableBiometric = value;
+        if (value.isEmpty) {
+          if (!mounted) return;
+          context.pushReplacementNamed(Routes.homeScreen);
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.remove('auth_screen_enabled');
+        } else {
+          _authenticate();
+        }
+      });
     });
   }
 
@@ -127,96 +135,15 @@ class _AuthState extends State<Auth> {
         localizedReason: context.tr('enterFingerprint'),
         options: const AuthenticationOptions(
           stickyAuth: true,
-          biometricOnly: true,
         ),
       );
-    } on PlatformException catch (e) {
-      if (!mounted) return;
-      AwesomeDialog(
-        context: context,
-        dialogType: DialogType.warning,
-        headerAnimationLoop: false,
-        animType: AnimType.topSlide,
-        showCloseIcon: true,
-        closeIcon: const Icon(Icons.close_rounded),
-        title: e.code,
-        desc: e.message,
-        onDismissCallback: (type) {
-          logger.e('Dialog Dismiss from callback $type');
-        },
-      ).show();
-      if (e.code == 'PermanentlyLockedOut') {
-        context.pop();
-        _text2 = '';
-        _text1 = context.tr('tooManyAttempts');
-        setState(() {});
-        return _authenticatePin();
-      }
-      fingColor = Colors.red;
-      restart();
-      return;
-    }
-
-    if (authenticated) {
-      if (!mounted) return;
-
-      context.pushReplacementNamed(Routes.homeScreen);
-    } else {
-      _authenticate();
-    }
-  }
-
-  Future<void> _authenticatePin() async {
-    bool authenticated = false;
-
-    try {
-      authenticated = await auth.authenticate(
-        localizedReason: context.tr('pleaseEnterPin'),
-        options: const AuthenticationOptions(
-          stickyAuth: true,
-        ),
-      );
-    } on PlatformException catch (e) {
-      if (!mounted) return;
-
-      AwesomeDialog(
-        context: context,
-        dialogType: DialogType.warning,
-        headerAnimationLoop: false,
-        animType: AnimType.topSlide,
-        showCloseIcon: true,
-        closeIcon: const Icon(Icons.close_rounded),
-        title: e.code,
-        desc: e.message,
-        onDismissCallback: (type) {
-          logger.e('Dialog Dismiss from callback $type');
-        },
-      ).show();
-      return;
-    }
-
-    if (authenticated) {
-      if (!mounted) return;
-
-      context.pushReplacementNamed(Routes.homeScreen);
-    } else {
-      _authenticatePin();
-    }
-  }
-
-  Future<void> _checkBiometrics() async {
-    try {
-      _canCheckBiometrics = await auth.canCheckBiometrics;
-    } on PlatformException catch (e) {
-      _canCheckBiometrics = false;
-      logger.e(e);
     } finally {
-      setState(() {});
-      if (_canCheckBiometrics) {
-        _authenticate();
-      } else {
-        _authenticatePin();
-      }
+      setState(() {
+        fingColor = Colors.red;
+        authenticated
+            ? context.pushReplacementNamed(Routes.homeScreen)
+            : restart();
+      });
     }
   }
 }

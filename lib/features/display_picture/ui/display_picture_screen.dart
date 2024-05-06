@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:logger/logger.dart';
 
 import '../../../services/database.dart';
 import '../../../services/notification_service.dart';
@@ -32,7 +31,6 @@ class DisplayPictureScreen extends StatefulWidget {
 }
 
 class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
-  final logger = Logger();
   late String url;
   final _auth = FirebaseAuth.instance;
 

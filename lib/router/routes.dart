@@ -1,7 +1,6 @@
 class Routes {
   static const homeScreen = '/homeScreen';
   static const settingsScreen = '/settingsScreen';
-  static const takePictureScreen = '/takePictureScreen';
   static const newGroupScreen = '/newGroupScreen';
   static const authScreen = '/authScreen';
   static const loginScreen = '/loginScreen';

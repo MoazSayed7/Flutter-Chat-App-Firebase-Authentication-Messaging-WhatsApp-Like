@@ -185,32 +185,31 @@ class _ChatScreenState extends State<ChatScreen> {
   Future getImageFromCamera() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.camera);
 
-    setState(() {
-      if (pickedFile != null) {
-        context.pushNamed(Routes.displayPictureScreen, arguments: [
-          pickedFile,
-          token!,
-          widget.receivedMToken,
-          widget.receivedUserID,
-        ]);
-      }
-    });
+    if (pickedFile != null) {
+      if (!mounted) return;
+
+      context.pushNamed(Routes.displayPictureScreen, arguments: [
+        pickedFile,
+        token!,
+        widget.receivedMToken,
+        widget.receivedUserID,
+      ]);
+    }
   }
 
 //Image Picker function to get image from gallery
   Future getImageFromGallery() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
 
-    setState(() {
-      if (pickedFile != null) {
-        context.pushNamed(Routes.displayPictureScreen, arguments: [
-          pickedFile,
-          token!,
-          widget.receivedMToken,
-          widget.receivedUserID,
-        ]);
-      }
-    });
+    if (pickedFile != null) {
+      if (!mounted) return;
+      context.pushNamed(Routes.displayPictureScreen, arguments: [
+        pickedFile,
+        token!,
+        widget.receivedMToken,
+        widget.receivedUserID,
+      ]);
+    }
   }
 
   getToken() async {
