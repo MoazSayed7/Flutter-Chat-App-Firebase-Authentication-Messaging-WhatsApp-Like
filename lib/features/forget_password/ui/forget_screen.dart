@@ -70,10 +70,11 @@ class ForgetScreen extends StatelessWidget {
       body: OfflineBuilder(
         connectivityBuilder: (
           BuildContext context,
-          ConnectivityResult connectivity,
+          List<ConnectivityResult> connectivity,
           Widget child,
         ) {
-          final bool connected = connectivity != ConnectivityResult.none;
+          final bool connected =
+              !connectivity.contains(ConnectivityResult.none);
           return connected
               ? const BuildForgetScreen()
               : const BuildNoInternet();
