@@ -92,6 +92,10 @@ This Flutter project is a chat application inspired by WhatsApp. The app feature
         <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/0903c423-ae48-4e4f-b824-35e66b95859a" alt="drawing" style="width:250px;"/>
         <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/961764ab-aa39-4358-9c49-46642c61a25b" alt="drawing" style="width:250px;"/>
         <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/5c4007b0-e594-468c-94e8-2fb7d46aacb4" alt="drawing" style="width:250px;"/>
+        <br/>
+        <br/>
+        <br/>
+        <img src="https://github.com/user-attachments/assets/7f9ddae1-be41-4bcb-ac6a-c911de9606b4" alt="drawing" style="width:250px;"/>
     </body>
 </HTML>
 
@@ -105,7 +109,8 @@ This Flutter project is a chat application inspired by WhatsApp. The app feature
         <br/>
         <br/>
         <br/>
-        <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/5d4b01b8-8aeb-43ab-935c-0fd57077eb80" alt="drawing" style="width:250px;"/>
+        <img src="https://github.com/user-attachments/assets/d1c66959-dff9-4e2d-8d97-02a624ebc0b0" alt="drawing" style="width:250px;"/>
+        <img src="https://github.com/user-attachments/assets/5eb836bf-d392-4157-8d71-7b4caf2667c7" alt="drawing" style="width:250px;"/>
         <img src="https://github.com/MoazSayed7/Flutter-Chat-App-Firebase-Authentication-Messaging-WhatsApp-Like/assets/75115429/c5917daa-66dc-4ccf-9d04-67384061609d" alt="drawing" style="width:250px;"/>
     </body>
 </HTML>
@@ -206,6 +211,10 @@ This Flutter project is a chat application inspired by WhatsApp. The app feature
 - `flutter_speed_dial`: Plugin to implement a beautiful and dynamic Material Design Speed Dial with labels.
 - `flutter_svg`: An SVG rendering and widget library.
 - `gap`: Simplifies spacing management in layouts.
+- `flutter_link_previewer`: Customizable link and URL preview extracted from the provided text with the ability to render from the cache.
+- `gallery_saver`: Saves images and videos from network or temporary file to external storage. Both images and videos will be visible in Android Gallery and iOS Photos.
+- `restart_app`: A Flutter plugin that helps you to restart the whole Flutter app with a single function call by using native APIs.
+- `path_provider`: Flutter plugin for getting commonly used locations on host platform file systems, such as the temp and app data directories.
 - `google_sign_in`: Facilitates Google Sign-In authentication.
 - `googleapis_auth`: Obtain Access credentials for Google services using OAuth 2.0.
 - `image_picker`: Plugin for selecting images from the image library, and taking new pictures with the camera.
@@ -246,56 +255,18 @@ flutter pub get
 5. Set up Firebase for your project by following the [Using Firebase CLI](https://firebase.google.com/docs/flutter/setup).
 ---
 
-6. ### Customized `chat_bubbles` Package
-
-I have made custom modifications to the `chat_bubbles` package 
-
-#### Implementation Details
-
-I have already uploaded the edited files to my project. You can find it in the following path:
-
-```
-removeable/bubble_normal_image.dart
-removeable/bubble_special_three.dart
-removeable/date_chip.dart
-removeable/message_bar.dart
-```
-
-#### How to Apply Changes
-
-1. Download the edited files.
-
-2. Replace the existing files in your Flutter project with the downloaded files.
-
-   - For `bubble_special_three.dart` and `bubble_normal_image.dart`, navigate to:
-     ```
-     %LocalAppData%\Pub\Cache\hosted\pub.dev\chat_bubbles-1.5.0\lib\bubbles\
-     ```
-   
-   - For `date_chip.dart`, navigate to:
-     ```
-     %LocalAppData%\Pub\Cache\hosted\pub.dev\chat_bubbles-1.5.0\lib\date_chips\
-     ```
-   
-   - For `message_bar.dart`, navigate to:
-     ```
-     %LocalAppData%\Pub\Cache\hosted\pub.dev\chat_bubbles-1.5.0\lib\message_bars\
-     ```
-
----
-
-7. Update the app's launcher icon:
+6. Update the app's launcher icon:
    
 ```bash
 dart run flutter_launcher_icons
 ```
-8. Update the app's splash screen:
+7. Update the app's splash screen:
 
 ```bash
 dart run flutter_native_splash:create --path=flutter_native_splash.yaml
 ```
 
-9. Run the app:
+8. Run the app:
 
 ```bash
 flutter run
