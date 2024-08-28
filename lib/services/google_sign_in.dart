@@ -1,5 +1,4 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,6 +8,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 import '../helpers/extensions.dart';
 import '../router/routes.dart';
+import 'database.dart';
 
 class GoogleSignin {
   static final _auth = FirebaseAuth.instance;

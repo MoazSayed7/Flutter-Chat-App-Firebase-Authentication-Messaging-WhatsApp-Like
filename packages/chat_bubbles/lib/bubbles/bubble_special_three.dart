@@ -1,5 +1,3 @@
-import 'package:gap/gap.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 
 ///iMessage's chat bubble type
@@ -58,19 +56,21 @@ class BubbleSpecialThree extends StatelessWidget {
                     children: [
                       Text(
                         text,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 16.sp,
+                          fontSize: 16,
                         ),
                         textAlign: textAlign,
                       ),
-                      Gap(3.h),
+                      const SizedBox(
+                        height: 3,
+                      ),
                       Text(
                         sendTime,
                         textAlign: TextAlign.right,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 10.sp,
+                          fontSize: 10,
                         ),
                       ),
                     ],

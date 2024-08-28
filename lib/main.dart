@@ -10,11 +10,11 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'chatchat.dart';
 import 'firebase_options.dart';
 import 'router/app_routes.dart';
 import 'router/routes.dart';
 import 'services/database.dart';
-import 'themes/colors.dart';
 
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -40,7 +40,7 @@ Future<void> main() async {
       supportedLocales: const [Locale('ar'), Locale('en')],
       path: 'assets/translations',
       startLocale: const Locale('ar'),
-      child: MyApp(
+      child: ChatChat(
         appRoute: AppRoute(),
       ),
     ),
@@ -96,60 +96,3 @@ Future<void> initApp() async {
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {}
-
-class MyApp extends StatefulWidget {
-  final AppRoute appRoute;
-  const MyApp({
-    super.key,
-    required this.appRoute,
-  });
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  @override
-  Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      designSize: const Size(375, 812),
-      minTextAdapt: true,
-      splitScreenMode: true,
-      child: MaterialApp(
-        title: 'Chat Chat',
-        localizationsDelegates: context.localizationDelegates,
-        supportedLocales: context.supportedLocales,
-        locale: context.locale,
-        theme: ThemeData(
-          useMaterial3: true,
-          primaryColor: ColorsManager.greenPrimary,
-          textSelectionTheme: const TextSelectionThemeData(
-            cursorColor: ColorsManager.greenPrimary,
-            selectionHandleColor: ColorsManager.greenPrimary,
-            selectionColor: Color.fromARGB(209, 0, 168, 132),
-          ),
-          progressIndicatorTheme: const ProgressIndicatorThemeData(
-            color: ColorsManager.greenPrimary,
-          ),
-          floatingActionButtonTheme: const FloatingActionButtonThemeData(
-            backgroundColor: ColorsManager.greenPrimary,
-          ),
-          scaffoldBackgroundColor: ColorsManager.backgroundDefaultColor,
-          appBarTheme: const AppBarTheme(
-            foregroundColor: Colors.white,
-            backgroundColor: ColorsManager.appBarBackgroundColor,
-          ),
-        ),
-        onGenerateRoute: widget.appRoute.onGenerateRoute,
-        initialRoute: initialRoute,
-        debugShowCheckedModeBanner: false,
-      ),
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    FlutterNativeSplash.remove();
-  }
-}

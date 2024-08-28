@@ -1,5 +1,4 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
-import '../../services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,6 +12,7 @@ import '../../../helpers/app_regex.dart';
 import '../../../themes/styles.dart';
 import '../../helpers/extensions.dart';
 import '../../router/routes.dart';
+import '../../services/database.dart';
 import 'app_button.dart';
 import 'app_text_form_field.dart';
 import 'password_validations.dart';

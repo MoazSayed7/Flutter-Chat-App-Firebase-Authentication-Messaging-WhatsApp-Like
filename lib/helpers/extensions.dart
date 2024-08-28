@@ -18,3 +18,15 @@ extension Navigation on BuildContext {
         .pushReplacementNamed(routeName, arguments: arguments);
   }
 }
+
+extension StringExtension on String? {
+  RegExp get isContainsLink {
+    return RegExp(
+      r'((http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?([a-z0-9]+([-\.]{1}[a-z0-9]+)*\.[a-z]{2,5})(:[0-9]{1,5})?(\/\S*)?)',
+      caseSensitive: false,
+      multiLine: true,
+    );
+  }
+
+  bool isNullOrEmpty() => this == null || this!.isEmpty || this == '';
+}

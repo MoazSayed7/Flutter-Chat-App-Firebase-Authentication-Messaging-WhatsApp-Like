@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import '../../../themes/colors.dart';
+import 'package:chatchat/helpers/extensions.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -11,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../services/database.dart';
 import '../../../services/notification_service.dart';
+import '../../../themes/colors.dart';
 
 class DisplayPictureScreen extends StatefulWidget {
   final XFile image;
@@ -32,11 +33,11 @@ class DisplayPictureScreen extends StatefulWidget {
 
 class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
   late String url;
+
   final _auth = FirebaseAuth.instance;
-
   Reference? storageRef;
-  final _chatService = NotificationService();
 
+  final _chatService = NotificationService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,9 +58,17 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
             child: const Icon(Icons.save_alt_rounded, color: Colors.white),
             backgroundColor: ColorsManager.greenPrimary,
             onTap: () async {
+              _showLoadingDialog();
               final String filename = widget.image.name;
               await widget.image
                   .saveTo('/storage/emulated/0/DCIM/Camera/$filename');
+              if (!context.mounted) return;
+              context.pop();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Image Saved'),
+                ),
+              );
             },
             label: 'Save',
             labelStyle: TextStyle(
@@ -74,6 +83,7 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
               child: const Icon(Icons.send_rounded, color: Colors.white),
               backgroundColor: ColorsManager.greenPrimary,
               onTap: () async {
+                _showLoadingDialog();
                 storageRef =
                     FirebaseStorage.instance.ref('images/${widget.image.name}');
                 await storageRef!.putFile(File(widget.image.path));
@@ -90,6 +100,13 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
                   _auth.currentUser!.displayName!,
                   _auth.currentUser!.uid,
                   _auth.currentUser!.photoURL,
+                );
+                if (!context.mounted) return;
+                context.pop();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Image Sent'),
+                  ),
                 );
               },
               label: 'Send',
@@ -110,6 +127,23 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
           fit: BoxFit.cover,
         ),
       ),
+    );
+  }
+
+  void _showLoadingDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) {
+        return const PopScope(
+          canPop: false,
+          child: Center(
+            child: CircularProgressIndicator(
+              color: ColorsManager.greenPrimary,
+            ),
+          ),
+        );
+      },
     );
   }
 }

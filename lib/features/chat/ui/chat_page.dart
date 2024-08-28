@@ -4,20 +4,26 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../../../core/networking/dio_factory.dart';
 import '../../../helpers/extensions.dart';
 import '../../../helpers/notifications.dart';
 import '../../../router/routes.dart';
 import '../../../services/database.dart';
 import '../../../services/notification_service.dart';
 import '../../../themes/colors.dart';
-import '../../../themes/styles.dart';
+import 'widgets/message_bar.dart';
+import 'widgets/url_preview.dart';
 
 class ChatScreen extends StatefulWidget {
   final String receivedUserName;
@@ -41,7 +47,6 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final _chatService = NotificationService();
   final _auth = FirebaseAuth.instance;
-  final _scrollController = ScrollController();
   late String? token;
   TextAlign textAlign = TextAlign.start;
 
@@ -52,55 +57,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leadingWidth: 85.w,
-        leading: InkWell(
-          borderRadius: BorderRadius.circular(50),
-          onTap: () => Navigator.pop(context),
-          child: Row(
-            children: [
-              Gap(10.w),
-              Icon(Icons.arrow_back_ios, size: 25.sp),
-              widget.receivedUserProfilePic != null &&
-                      widget.receivedUserProfilePic != ''
-                  ? Hero(
-                      tag: widget.receivedUserProfilePic!,
-                      child: ClipOval(
-                        child: FadeInImage.assetNetwork(
-                          placeholder: 'assets/images/loading.gif',
-                          image: widget.receivedUserProfilePic!,
-                          fit: BoxFit.cover,
-                          width: 50.w,
-                          height: 50.h,
-                        ),
-                      ),
-                    )
-                  : Image.asset(
-                      'assets/images/user.png',
-                      height: 50.h,
-                      width: 50.w,
-                      fit: BoxFit.cover,
-                    ),
-            ],
-          ),
-        ),
-        toolbarHeight: 70.h,
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(widget.receivedUserName),
-            Text(
-              widget.active == 'true'
-                  ? context.tr('online')
-                  : context.tr('offline'),
-              style: TextStyle(
-                fontSize: 13.sp,
-                color: const Color.fromARGB(255, 179, 178, 178),
-              ),
-            ),
-          ],
-        ),
-      ),
+      appBar: _buildAppBar(context),
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
@@ -116,27 +73,12 @@ class _ChatScreenState extends State<ChatScreen> {
               Expanded(
                 child: _buildMessagesList(),
               ),
-              MessageBar(
-                messageBarHitText: context.tr('message'),
-                messageBarHintStyle: TextStyles.font14Grey400Weight,
-                messageBarTextStyle: TextStyles.font18White500Weight.copyWith(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w400,
-                ),
-                messageBarColor: Colors.transparent,
-                contentPadding: EdgeInsets.symmetric(
-                  horizontal: 10.w,
-                  vertical: 7.h,
-                ),
-                paddingTextAndSendButton: context.locale.toString() == 'en'
-                    ? EdgeInsets.only(left: 4.w)
-                    : EdgeInsets.only(right: 4.w),
+              CustomMessageBar(
                 onSend: (message) async {
                   await DatabaseMethods.sendMessage(
                     message,
                     widget.receivedUserID,
                   );
-                  scrollToDown();
                   await _chatService.sendPushMessage(
                     widget.receivedMToken,
                     token!,
@@ -146,28 +88,8 @@ class _ChatScreenState extends State<ChatScreen> {
                     _auth.currentUser!.photoURL,
                   );
                 },
-                actions: [
-                  Padding(
-                    padding: context.locale.toString() == 'ar'
-                        ? EdgeInsets.only(left: 4.w)
-                        : EdgeInsets.only(right: 4.w),
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Color(0xff00a884),
-                        shape: BoxShape.circle,
-                      ),
-                      child: IconButton(
-                        icon: const Icon(
-                          Icons.camera_alt,
-                          color: Colors.black,
-                          size: 28,
-                        ),
-                        onPressed: () => showOptions(),
-                      ),
-                    ),
-                  )
-                ],
-              )
+                onShowOptions: showImageOptions,
+              ),
             ],
           ),
         ),
@@ -175,13 +97,7 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-//Image Picker function to get image from camera
+  //Image Picker function to get image from camera
   Future getImageFromCamera() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.camera);
 
@@ -221,11 +137,9 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await Future.delayed(const Duration(milliseconds: 1000));
-      scrollToDown();
       await HelperNotification.initialize(flutterLocalNotificationsPlugin);
+      await getToken();
     });
-    getToken();
     // listen for messages when the app is in the foreground
     FirebaseMessaging.onMessage.listen(
       (RemoteMessage message) {
@@ -243,16 +157,8 @@ class _ChatScreenState extends State<ChatScreen> {
     return bidi;
   }
 
-  void scrollToDown() {
-    _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent + 90.h,
-      duration: const Duration(seconds: 1),
-      curve: Curves.fastOutSlowIn,
-    );
-  }
-
-  Future showOptions() async {
-    showCupertinoModalPopup(
+  Future showImageOptions() async {
+    await showCupertinoModalPopup(
       context: context,
       builder: (context) => CupertinoActionSheet(
         actions: [
@@ -275,61 +181,170 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  Widget _buildMessageItem(DocumentSnapshot snapshot,
-      DocumentSnapshot? previousMessage, DocumentSnapshot? nextMessage) {
-    Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+  AppBar _buildAppBar(BuildContext context) {
+    return AppBar(
+      leadingWidth: 85.w,
+      leading: InkWell(
+        borderRadius: BorderRadius.circular(50),
+        onTap: () => Navigator.pop(context),
+        child: Row(
+          children: [
+            Gap(10.w),
+            Icon(Icons.arrow_back_ios, size: 25.sp),
+            widget.receivedUserProfilePic != null &&
+                    widget.receivedUserProfilePic != ''
+                ? Hero(
+                    tag: widget.receivedUserProfilePic!,
+                    child: ClipOval(
+                      child: FadeInImage.assetNetwork(
+                        placeholder: 'assets/images/loading.gif',
+                        image: widget.receivedUserProfilePic!,
+                        fit: BoxFit.cover,
+                        width: 50.w,
+                        height: 50.h,
+                      ),
+                    ),
+                  )
+                : Image.asset(
+                    'assets/images/user.png',
+                    height: 50.h,
+                    width: 50.w,
+                    fit: BoxFit.cover,
+                  ),
+          ],
+        ),
+      ),
+      toolbarHeight: 70.h,
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(widget.receivedUserName),
+          Text(
+            widget.active == 'true'
+                ? context.tr('online')
+                : context.tr('offline'),
+            style: TextStyle(
+              fontSize: 13.sp,
+              color: const Color.fromARGB(255, 179, 178, 178),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
-    // Check if the current message is from a different day than the previous one
-    bool isNewDay = previousMessage == null ||
-        !_isSameDay(
-            data['timestamp'].toDate(), previousMessage['timestamp'].toDate());
+  BubbleNormalImage _buildImagePreviewer(
+      Map<String, dynamic> data, bool isNewSender, String message) {
+    return BubbleNormalImage(
+      onPressDownload: () async {
+        await _downloadImageFromFirebase(
+          FirebaseStorage.instance.refFromURL(message),
+          message,
+        );
+      },
+      id: data['timestamp'].toDate().toString(),
+      isArabicApp: context.locale.toString() == 'ar' ? true : false,
+      tail: isNewSender,
+      isSender: data['senderID'] == _auth.currentUser!.uid ? true : false,
+      color: data['senderID'] == _auth.currentUser!.uid
+          ? const Color.fromARGB(255, 0, 107, 84)
+          : const Color(0xff273443),
+      image: CachedNetworkImage(
+        imageUrl: message,
+        placeholder: (context, url) => Image.asset('assets/images/loading.gif'),
+        errorWidget: (context, url, error) =>
+            const Icon(Icons.error_outline_rounded),
+      ),
+    );
+  }
+
+  Align _buildLinkPreviewer(Map<String, dynamic> data, String message) {
+    bool isNewSender = data['senderID'] == _auth.currentUser!.uid
+        ? context.locale.languageCode == 'ar'
+            ? false
+            : true
+        : context.locale.languageCode == 'ar'
+            ? true
+            : false;
+    return Align(
+      alignment: data['senderID'] == _auth.currentUser!.uid
+          ? context.locale.languageCode == 'ar'
+              ? Alignment.centerLeft
+              : Alignment.centerRight
+          : context.locale.languageCode == 'ar'
+              ? Alignment.centerRight
+              : Alignment.centerLeft,
+      child: Container(
+        margin: isNewSender
+            ? const EdgeInsets.fromLTRB(7, 7, 17, 7)
+            : const EdgeInsets.fromLTRB(17, 7, 7, 7),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(
+            Radius.circular(20.r),
+          ),
+          color: data['senderID'] == _auth.currentUser!.uid
+              ? const Color.fromARGB(255, 0, 107, 84)
+              : const Color(0xff273443),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.all(
+            Radius.circular(20.r),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              LinkPreviewWidget(
+                message: message,
+                onLinkPressed: (link) async {
+                  await _launchURL(link);
+                },
+              ),
+              Gap(3.h),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.0.w, vertical: 5.h),
+                child: Text(
+                  DateFormat("h:mm a").format(
+                    data['timestamp'].toDate(),
+                  ),
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 10.sp,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMessageItem(
+      DocumentSnapshot snapshot,
+      DocumentSnapshot? previousMessage,
+      DocumentSnapshot? nextMessage,
+      bool isNewDay) {
+    Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
     bool isNewSender =
         nextMessage == null || data['senderID'] != nextMessage['senderID'];
+    String message = data['message'];
     return Column(
       children: [
         if (isNewDay)
           DateChip(
             date: data['timestamp'].toDate(),
-            color: const Color(0xff273443),
             dateColor: ColorsManager.gray400,
+            color: const Color(0xff273443),
           ),
-        if (data['message'].contains('https://'))
-          BubbleNormalImage(
-            id: data['timestamp'].toDate().toString(),
-            isArabicApp: context.locale.toString() == 'ar' ? true : false,
-            tail: isNewSender,
-            isSender: data['senderID'] == _auth.currentUser!.uid ? true : false,
-            color: data['senderID'] == _auth.currentUser!.uid
-                ? const Color.fromARGB(255, 0, 107, 84)
-                : const Color(0xff273443),
-            image: CachedNetworkImage(
-              imageUrl: data['message'],
-              placeholder: (context, url) =>
-                  Image.asset('assets/images/loading.gif'),
-              errorWidget: (context, url, error) =>
-                  const Icon(Icons.error_outline_rounded),
-            ),
-          ),
-        if (!data['message'].contains('https://'))
-          BubbleSpecialThree(
-            text: data['message'],
-            color: data['senderID'] == _auth.currentUser!.uid
-                ? const Color.fromARGB(255, 0, 107, 84)
-                : const Color(0xff273443),
-            textAlign:
-                isArabic(data['message']) ? TextAlign.right : TextAlign.left,
-            sendTime: DateFormat("h:mm a").format(
-              data['timestamp'].toDate(),
-            ),
-            tail: isNewSender,
-            isSender: data['senderID'] == _auth.currentUser!.uid
-                ? context.locale.languageCode == 'ar'
-                    ? false
-                    : true
-                : context.locale.languageCode == 'ar'
-                    ? true
-                    : false,
-          ),
+        if (message.contains(message.isContainsLink) &&
+            message.contains('firebasestorage'))
+          _buildImagePreviewer(data, isNewSender, message),
+        if (message.contains(message.isContainsLink) &&
+            !message.contains('firebasestorage'))
+          _buildLinkPreviewer(data, message),
+        if (!message.contains(message.isContainsLink))
+          _buildTextMessage(message, data, isNewSender),
       ],
     );
   }
@@ -351,7 +366,7 @@ class _ChatScreenState extends State<ChatScreen> {
         List<DocumentSnapshot> messageDocs = snapshot.data!.docs;
 
         return ListView.builder(
-          controller: _scrollController,
+          reverse: true,
           itemCount: messageDocs.length,
           itemBuilder: (context, index) {
             DocumentSnapshot currentMessage = messageDocs[index];
@@ -360,11 +375,66 @@ class _ChatScreenState extends State<ChatScreen> {
             DocumentSnapshot? nextMessage =
                 index < messageDocs.length - 1 ? messageDocs[index + 1] : null;
 
+            // Determine if the current message is from a new day
+            bool isNewDay = nextMessage == null ||
+                !_isSameDay(currentMessage['timestamp'].toDate(),
+                    nextMessage['timestamp'].toDate());
+
             return _buildMessageItem(
-                currentMessage, previousMessage, nextMessage);
+              currentMessage,
+              previousMessage,
+              nextMessage,
+              isNewDay,
+            );
           },
         );
       },
+    );
+  }
+
+  BubbleSpecialThree _buildTextMessage(
+      String message, Map<String, dynamic> data, bool isNewSender) {
+    return BubbleSpecialThree(
+      text: message,
+      color: data['senderID'] == _auth.currentUser!.uid
+          ? const Color.fromARGB(255, 0, 107, 84)
+          : const Color(0xff273443),
+      textAlign: isArabic(message) ? TextAlign.right : TextAlign.left,
+      sendTime: DateFormat("h:mm a").format(
+        data['timestamp'].toDate(),
+      ),
+      tail: isNewSender,
+      isSender: data['senderID'] == _auth.currentUser!.uid
+          ? context.locale.languageCode == 'ar'
+              ? false
+              : true
+          : context.locale.languageCode == 'ar'
+              ? true
+              : false,
+    );
+  }
+
+  Future<void> _downloadImageFromFirebase(Reference ref, String url) async {
+    _showLoadingDialog();
+    // Define the path where you want to save the image
+    final tempDir = await getTemporaryDirectory();
+    final path = '${tempDir.path}/${ref.name}';
+
+    // Download the image using Dio
+    await DioFactory.getDio().download(url, path);
+
+    // Save the file to the gallery
+    await GallerySaver.saveImage(
+      path,
+      albumName: 'ChatChat',
+      toDcim: true,
+    );
+    if (!mounted) return;
+    context.pop();
+
+    // Show a snackbar to indicate the download is complete
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Image Downloaded')),
     );
   }
 
@@ -372,5 +442,35 @@ class _ChatScreenState extends State<ChatScreen> {
     return timestamp1.year == timestamp2.year &&
         timestamp1.month == timestamp2.month &&
         timestamp1.day == timestamp2.day;
+  }
+
+  Future<void> _launchURL(String myUrl) async {
+    if (!myUrl.startsWith('http://') && !myUrl.startsWith('https://')) {
+      myUrl = 'https://$myUrl';
+    }
+    final Uri url = Uri.parse(myUrl);
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.inAppBrowserView,
+    )) {
+      throw Exception('Could not launch $url');
+    }
+  }
+
+  void _showLoadingDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) {
+        return const PopScope(
+          canPop: false,
+          child: Center(
+            child: CircularProgressIndicator(
+              color: ColorsManager.greenPrimary,
+            ),
+          ),
+        );
+      },
+    );
   }
 }

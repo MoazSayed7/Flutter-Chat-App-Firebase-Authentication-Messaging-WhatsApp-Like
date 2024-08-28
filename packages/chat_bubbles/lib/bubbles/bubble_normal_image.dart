@@ -24,6 +24,7 @@ class BubbleNormalImage extends StatelessWidget {
 
   final String id;
   final Widget image;
+
   final double bubbleRadius;
   final bool isSender;
   final bool isArabicApp;
@@ -34,6 +35,7 @@ class BubbleNormalImage extends StatelessWidget {
   final bool delivered;
   final bool seen;
   final void Function()? onTap;
+  final void Function()? onPressDownload;
 
   const BubbleNormalImage({
     Key? key,
@@ -48,6 +50,7 @@ class BubbleNormalImage extends StatelessWidget {
     this.delivered = false,
     this.seen = false,
     this.onTap,
+    this.onPressDownload,
   }) : super(key: key);
 
   /// image bubble builder method
@@ -57,7 +60,7 @@ class BubbleNormalImage extends StatelessWidget {
     Icon? stateIcon;
     if (sent) {
       stateTick = true;
-      stateIcon = Icon(
+      stateIcon = const Icon(
         Icons.done,
         size: 18,
         color: Color(0xFF97AD8E),
@@ -65,7 +68,7 @@ class BubbleNormalImage extends StatelessWidget {
     }
     if (delivered) {
       stateTick = true;
-      stateIcon = Icon(
+      stateIcon = const Icon(
         Icons.done_all,
         size: 18,
         color: Color(0xFF97AD8E),
@@ -73,7 +76,7 @@ class BubbleNormalImage extends StatelessWidget {
     }
     if (seen) {
       stateTick = true;
-      stateIcon = Icon(
+      stateIcon = const Icon(
         Icons.done_all,
         size: 18,
         color: Color(0xFF92DEDA),
@@ -96,6 +99,18 @@ class BubbleNormalImage extends StatelessWidget {
                 maxWidth: MediaQuery.of(context).size.width * .5,
                 maxHeight: MediaQuery.of(context).size.width * .5),
             child: GestureDetector(
+                onTap: onTap ??
+                    () {
+                      Navigator.push(context, MaterialPageRoute(builder: (_) {
+                        return _DetailScreen(
+                          tag: id,
+                          image: image,
+                          isAppArabic: isArabicApp,
+                          isReciver: !isSender,
+                          onPressed: onPressDownload,
+                        );
+                      }));
+                    },
                 child: Hero(
                   tag: id,
                   child: Stack(
@@ -144,21 +159,12 @@ class BubbleNormalImage extends StatelessWidget {
                               right: 6,
                               child: stateIcon,
                             )
-                          : SizedBox(
+                          : const SizedBox(
                               width: 1,
                             ),
                     ],
                   ),
-                ),
-                onTap: onTap ??
-                    () {
-                      Navigator.push(context, MaterialPageRoute(builder: (_) {
-                        return _DetailScreen(
-                          tag: id,
-                          image: image,
-                        );
-                      }));
-                    }),
+                )),
           ),
         )
       ],
@@ -170,8 +176,16 @@ class BubbleNormalImage extends StatelessWidget {
 class _DetailScreen extends StatefulWidget {
   final String tag;
   final Widget image;
-
-  const _DetailScreen({Key? key, required this.tag, required this.image})
+  final bool isAppArabic;
+  final void Function()? onPressed;
+  final bool isReciver;
+  const _DetailScreen(
+      {Key? key,
+      required this.tag,
+      required this.image,
+      required this.isAppArabic,
+      required this.isReciver,
+      this.onPressed})
       : super(key: key);
 
   @override
@@ -181,20 +195,29 @@ class _DetailScreen extends StatefulWidget {
 /// created using the Hero Widget
 class _DetailScreenState extends State<_DetailScreen> {
   @override
-  initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Scaffold(
         appBar: AppBar(),
+        floatingActionButtonLocation: widget.isAppArabic
+            ? FloatingActionButtonLocation.startFloat
+            : FloatingActionButtonLocation.endFloat,
+        floatingActionButton: widget.isReciver
+            ? Container(
+                decoration: const BoxDecoration(
+                  color: Color(0xff00a884),
+                  shape: BoxShape.circle,
+                ),
+                child: IconButton(
+                  onPressed: widget.onPressed,
+                  icon: const Icon(
+                    Icons.download_rounded,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                ),
+              )
+            : const SizedBox.shrink(),
         body: Center(
           child: Hero(
             tag: widget.tag,
@@ -206,5 +229,15 @@ class _DetailScreenState extends State<_DetailScreen> {
         Navigator.pop(context);
       },
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  initState() {
+    super.initState();
   }
 }
